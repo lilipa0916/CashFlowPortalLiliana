@@ -6,13 +6,10 @@ namespace CashFlowPortal.Applicacion.Interfaces.Services
 {
     public interface IUsuarioService
     {
-        Task<UsuarioDto> AutenticarAsync(LoginRequestDto loginDto);
-        Task<IEnumerable<UsuarioDto>> ObtenerTodosAsync();
-        Task<UsuarioDto?> ObtenerPorIdAsync(int id);
-           Task<UsuarioDto?> ObtenerUsuarioPorCredencialesAsync(string usuario, string contraseña);
-        Task<UsuarioDto?> GetByIdAsync(Guid id);
-        Task<UsuarioDto?> GetByUsernameAsync(string username);
-        Task<UsuarioDto?> AuthenticateAsync(string username, string password);
+        public interface IUsuarioService
+        {
+            Task<LoginResponseDto?> LoginAsync(LoginRequestDto request);
+        }
 
     }
 }

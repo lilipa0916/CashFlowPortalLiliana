@@ -16,6 +16,7 @@ namespace CashFlowPortal.Infraestructura.Data
         public DbSet<GastoDetalle> GastoDetalles => Set<GastoDetalle>();
         public DbSet<Deposito> Depositos => Set<Deposito>();
 
+        public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TipoGasto>()

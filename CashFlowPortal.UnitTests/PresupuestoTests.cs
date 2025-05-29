@@ -1,4 +1,5 @@
 ﻿using CashFlowPortal.Applicacion.DTOs;
+using CashFlowPortal.Applicacion.DTOs.Presupuesto;
 using System.ComponentModel.DataAnnotations;
 
 namespace CashFlowPortal.UnitTests
@@ -12,7 +13,7 @@ namespace CashFlowPortal.UnitTests
             {
                 Monto = -5,
                 TipoGastoId = 1,
-                Mes = DateTime.Now
+                Mes = DateTime.Now.Month
             };
 
             var context = new ValidationContext(presupuesto);

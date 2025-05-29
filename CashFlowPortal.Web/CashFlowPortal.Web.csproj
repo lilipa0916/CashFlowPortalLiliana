@@ -8,11 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CashFlowPortal.API\CashFlowPortal.API.csproj" />
     <ProjectReference Include="..\CashFlowPortal.Applicacion\CashFlowPortal.Applicacion.csproj" />
+    <ProjectReference Include="..\CashFlowPortal.Infraestructura\CashFlowPortal.Infraestructura.csproj" />
     <ProjectReference Include="..\CashFlowPortal.Shared\CashFlowPortal.Shared.csproj" />
   </ItemGroup>
 

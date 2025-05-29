@@ -7,7 +7,7 @@ namespace CashFlowPortal.API.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return null;
         }
     }
 }

@@ -1,4 +1,4 @@
-using CashFlowPortal.Applicacion.DTOs;
+using CashFlowPortal.Applicacion.DTOs.TipoGasto;
 using CashFlowPortal.Applicacion.Validator;
 
 namespace CashFlowPortal.UnitTests
@@ -9,7 +9,7 @@ namespace CashFlowPortal.UnitTests
         public void Nombre_Vacio_Deberia_Fallar()
         {
             var validator = new TipoGastoValidator();
-            var result = validator.Validate(new TipoGastoDto { Nombre = "" });
+            var result = validator.Validate(new CreateTipoGastoDto { Nombre = "" });
             Assert.False(result.IsValid);
         }
     }

@@ -1,5 +1,7 @@
 ﻿using CashFlowPortal.Applicacion.DTOs;
+using CashFlowPortal.Applicacion.DTOs.TipoGasto;
 using CashFlowPortal.Applicacion.Interfaces;
+using CashFlowPortal.Applicacion.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CashFlowPortal.API.Controllers

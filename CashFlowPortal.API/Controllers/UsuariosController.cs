@@ -1,5 +1,8 @@
 ﻿using CashFlowPortal.Applicacion.DTOs;
+using CashFlowPortal.Applicacion.DTOs.Auth;
+using CashFlowPortal.Applicacion.DTOs.Usuario;
 using CashFlowPortal.Applicacion.Interfaces;
+using CashFlowPortal.Applicacion.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CashFlowPortal.API.Controllers
@@ -15,19 +18,12 @@ namespace CashFlowPortal.API.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get() =>
-            Ok(await _service.GetAllAsync());
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] UsuarioDto dto)
-        {
-            await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(Get), new { id = dto.Id }, dto);
-        }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UsuarioDto dto) =>
-            Ok(await _service.LoginAsync(dto.UsuarioLogin, dto.Password));
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto dto) => Ok();
+            //Ok(await _service.LoginAsync(dto));
     }
 }
+
+// Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)

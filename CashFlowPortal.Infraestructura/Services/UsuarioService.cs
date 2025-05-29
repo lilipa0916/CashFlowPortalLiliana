@@ -2,104 +2,57 @@
 using CashFlowPortal.Applicacion.DTOs.Usuario;
 using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.Services;
+using CashFlowPortal.Infraestructura.Auth;
 using CashFlowPortal.Infraestructura.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace CashFlowPortal.Infraestructura.Services
 {
     public class UsuarioService : IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
-        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, AppDbContext context)
+        private readonly JwtSettings _jwtSettings;
+
+        public UsuarioService(IUsuarioRepository usuarioRepository, IOptions<JwtSettings> jwtOptions)
         {
             _usuarioRepository = usuarioRepository;
-            _context = context;
-            _mapper = mapper;
+            _jwtSettings = jwtOptions.Value;
         }
 
-        public async Task<IEnumerable<UsuarioDto>> GetAllAsync()
+        public async Task<string?> LoginAsync(string usuario, string clave)
         {
-            var usuarios = await _usuarioRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<UsuarioDto>>(usuarios);
-        }
+            var user = await _usuarioRepository.GetByUsuarioAsync(usuario);
 
-        public async Task<UsuarioDto?> GetByIdAsync(Guid id)
-        {
-            var usuario = await _usuarioRepository.GetByIdAsync(id);
-            return usuario == null ? null : _mapper.Map<UsuarioDto>(usuario);
-        }
-
-        //public async Task<UsuarioDto> CreateAsync(UsuarioCreateDto dto)
-        //{
-        //    var usuario = _mapper.Map<Usuario>(dto);
-        //    usuario.Id = Guid.NewGuid();
-        //    usuario.CreadoEn = DateTime.UtcNow;
-
-        //    await _usuarioRepository.AddAsync(usuario);
-        //    return _mapper.Map<UsuarioDto>(usuario);
-        //}
-
-        //public async Task<bool> UpdateAsync(Guid id, UsuarioUpdateDto dto)
-        //{
-        //    var usuario = await _usuarioRepository.GetByIdAsync(id);
-        //    if (usuario == null) return false;
-
-        //    _mapper.Map(dto, usuario);
-        //    usuario.ModificadoEn = DateTime.UtcNow;
-
-        //    await _usuarioRepository.UpdateAsync(usuario);
-        //    return true;
-        //}
-
-        public async Task<bool> DeleteAsync(Guid id)
-        {
-            var usuario = await _usuarioRepository.GetByIdAsync(id);
-            if (usuario == null) return false;
-
-            await _usuarioRepository.DeleteAsync(usuario);
-            return true;
-        }
-
-        public async Task<UsuarioDto?> AuthenticateAsync(string username, string password)
-        {
-            var usuario = await _usuarioRepository.GetByUsernameAsync(username);
-            if (usuario == null || !BCrypt.Net.BCrypt.Verify(password, usuario.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(clave, user.ClaveHash))
                 return null;
 
-            return _mapper.Map<UsuarioDto>(usuario);
-        }
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
 
-        Task IUsuarioService.CrearUsuarioAsync(UsuarioDto dto)
-        {
-            throw new NotImplementedException();
-        }
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Nombre),
+                    new Claim(ClaimTypes.Role, "Admin") // Ajusta si deseas roles reales
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = _jwtSettings.Issuer,
+                Audience = _jwtSettings.Audience,
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
+            };
 
-        Task<UsuarioDto?> IUsuarioService.ObtenerUsuarioPorCredencialesAsync(string usuario, string contraseña)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<List<UsuarioDto>> IUsuarioService.ObtenerTodosAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<UsuarioDto?> AutenticarAsync(LoginDto loginDto)
-        {
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Username == loginDto.Username);
-            if (usuario == null) return null;
-
-            bool passwordValida = BCrypt.Net.BCrypt.Verify(loginDto.Password, usuario.PasswordHash);
-            return passwordValida ? _mapper.Map<UsuarioDto>(usuario) : null;
-        }
-
-
-        public async Task<IEnumerable<UsuarioDto>> ObtenerUsuariosAsync()
-        {
-            var usuarios = await _context.Usuarios.ToListAsync();
-            return _mapper.Map<IEnumerable<UsuarioDto>>(usuarios);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
