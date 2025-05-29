@@ -1,16 +1,18 @@
 using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.IServices;
+using CashFlowPortal.Applicacion.Interfaces.Repository;
 using CashFlowPortal.Applicacion.Interfaces.Services;
+using CashFlowPortal.Applicacion.Mappings;
 using CashFlowPortal.Applicacion.Services;
 using CashFlowPortal.Applicacion.Validator;
+using CashFlowPortal.Infraestructura.Data;
+using CashFlowPortal.Infraestructura.Repositories;
 using CashFlowPortal.Web.Components;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using CashFlowPortal.Infraestructura.Repositories;
-using CashFlowPortal.Infraestructura.Data;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +26,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();
 
+//Servicios
 builder.Services.AddScoped<ITipoGastoService, TipoGastoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+//Repositorios
+builder.Services.AddScoped<ITipoGastoRepository, TipoGastoRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();

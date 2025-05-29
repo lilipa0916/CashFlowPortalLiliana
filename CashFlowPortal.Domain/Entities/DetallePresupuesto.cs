@@ -8,12 +8,13 @@ namespace CashFlowPortal.Domain.Entities
 {
     public class DetallePresupuesto
     {
-        public int Id { get; set; }
-        public int PresupuestoId { get; set; }
-        public int TipoGastoId { get; set; }
+        public Guid Id { get; set; }
+        public Guid PresupuestoId { get; set; }
+        public Guid TipoGastoId { get; set; }
         public decimal MontoPresupuestado { get; set; }
 
         public TipoGasto TipoGasto { get; set; } = default!;
+        public Presupuesto Presupuesto { get; set; }
 
     }
 }

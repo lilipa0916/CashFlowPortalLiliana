@@ -1,10 +1,11 @@
-﻿using CashFlowPortal.Domain.Entities;
+﻿using CashFlowPortal.Applicacion.Interfaces.Repository;
+using CashFlowPortal.Domain.Entities;
 using CashFlowPortal.Infraestructura.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CashFlowPortal.Infraestructura.Repositories
 {
-    public class TipoGastoRepository
+    public class TipoGastoRepository : ITipoGastoRepository
     {
         private readonly AppDbContext _context;
 
@@ -25,7 +26,7 @@ namespace CashFlowPortal.Infraestructura.Repositories
             return await _context.TiposGasto.ToListAsync();
         }
 
-        public async Task<TipoGasto> GetByIdAsync(int id)
+        public async Task<TipoGasto?> GetByIdAsync(Guid id)
         {
             return await _context.TiposGasto.FindAsync(id);
         }
@@ -36,7 +37,7 @@ namespace CashFlowPortal.Infraestructura.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var entity = await _context.TiposGasto.FindAsync(id);
             if (entity != null)
