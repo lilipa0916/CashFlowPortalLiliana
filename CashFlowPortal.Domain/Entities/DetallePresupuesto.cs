@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Domain.Entities
 {
-    internal class DetallePresupuesto
+    public class DetallePresupuesto
     {
+        public int Id { get; set; }
+        public int PresupuestoId { get; set; }
+        public int TipoGastoId { get; set; }
+        public decimal MontoPresupuestado { get; set; }
+
+        public TipoGasto TipoGasto { get; set; } = default!;
+
     }
 }

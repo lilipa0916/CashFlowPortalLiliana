@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CashFlowPortal.Applicacion.DTOs
+namespace CashFlowPortal.Applicacion.DTOs.Gasto
 {
     public class GastoDetalleDto
     {

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CashFlowPortal.Applicacion.DTOs.TipoGasto;
 
 namespace CashFlowPortal.Applicacion.Interfaces.IServices
 {
-    internal interface ITipoGastoService
+    public interface ITipoGastoService
     {
+        Task<IEnumerable<TipoGastoDto>> GetAllAsync();
+        Task<TipoGastoDto?> GetByIdAsync(Guid id);
+        Task<bool> CreateAsync(TipoGastoDto dto);
+        Task<bool> UpdateAsync(TipoGastoDto dto);
+        Task<bool> DeleteAsync(Guid id);
     }
 }
