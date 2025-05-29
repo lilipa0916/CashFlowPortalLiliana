@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace CashFlowPortal.Applicacion.Validator
 {
-    public class CreateTipoGastoValidator: AbstractValidator<CreateTipoGastoDto>
+    public class CreateTipoGastoValidator: AbstractValidator<TipoGastoFormDto>
     {
         public CreateTipoGastoValidator() 
         {

@@ -21,11 +21,12 @@ namespace CashFlowPortal.Infraestructura.Data
         {
             modelBuilder.Entity<TipoGasto>()
                 .Property(p => p.Codigo)
-                .HasComputedColumnSql("'TG' + RIGHT('0000' + CAST([Id] AS VARCHAR), 4)", stored: true);
+                .HasComputedColumnSql("'TG' + RIGHT('0000' + CONVERT(VARCHAR(36), [Id]), 4)",
+                stored: true);
 
-          //  modelBuilder.Entity<TipoGasto>()
-          //.Property(x => x.Codigo)
-          //.HasComputedColumnSql("FORMAT(Id, 'D5')"); // autogenera código
+            //  modelBuilder.Entity<TipoGasto>()
+            //.Property(x => x.Codigo)
+            //.HasComputedColumnSql("FORMAT(Id, 'D5')"); // autogenera código
 
             modelBuilder.Entity<GastoDetalle>()
                 .HasOne(d => d.Gasto)

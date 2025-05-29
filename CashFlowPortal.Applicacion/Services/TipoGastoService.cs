@@ -39,13 +39,13 @@ namespace CashFlowPortal.Applicacion.Services
             return _mapper.Map<TipoGastoDto>(entity);
         }
 
-        public async Task CreateAsync(CreateTipoGastoDto dto)
+        public async Task CreateAsync(TipoGastoFormDto dto)
         {
             var tipo = _mapper.Map<TipoGasto>(dto);
             await _repository.AddAsync(tipo);
         }
 
-        public async Task UpdateAsync(UpdateTipoGastoDto dto)
+        public async Task UpdateAsync(TipoGastoFormDto dto)
         {
             var tipo = _mapper.Map<TipoGasto>(dto);
             await _repository.UpdateAsync(tipo);

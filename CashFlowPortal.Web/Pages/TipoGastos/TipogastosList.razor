@@ -1,0 +1,75 @@
+﻿@page "/tipogastos"
+
+
+@using CashFlowPortal.Applicacion.Interfaces.IServices
+
+@inject ITipoGastoService TipoGastoService
+@inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime
+
+<h3>Tipos de Gasto</h3>
+<button class="btn btn-primary mb-3" @onclick="Create">Nuevo Tipo de Gasto</button>
+
+@if (tipos == null)
+{
+    <p>Cargando...</p>
+}
+else if (!tipos.Any())
+{
+    <div class="alert alert-info">
+        No hay tipos de gasto registrados.
+    </div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in tipos)
+            {
+                <tr>
+                    <td>@item.Codigo</td>
+                    <td>@item.Nombre</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary me-1" @onclick="() => Edit(item.Id)">Editar</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => Delete(item.Id)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CashFlowPortal.Applicacion.DTOs.TipoGasto.TipoGastoDto> tipos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tipos = (await TipoGastoService.GetAllAsync()).ToList();
+    }
+
+    private void Create()
+    {
+        NavManager.NavigateTo("/tipogastos/form");
+    }
+
+    private void Edit(Guid id)
+    {
+        NavManager.NavigateTo($"/tipogastos/form/{id}");
+    }
+
+    private async Task Delete(Guid id)
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "¿Eliminar este tipo de gasto?"))
+        {
+            await TipoGastoService.DeleteAsync(id);
+            tipos = (await TipoGastoService.GetAllAsync()).ToList();
+        }
+    }
+}

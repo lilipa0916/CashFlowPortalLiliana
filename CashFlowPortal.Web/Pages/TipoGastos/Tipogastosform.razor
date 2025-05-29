@@ -1,0 +1,58 @@
+﻿@page "/tipogastos/form/{Id:guid?}"
+@using CashFlowPortal.Applicacion.DTOs.TipoGasto
+@using CashFlowPortal.Applicacion.Interfaces.IServices
+
+@inject ITipoGastoService TipoGastoService
+@inject NavigationManager NavManager
+
+<h3>@(Id.HasValue ? "Editar" : "Nuevo") Tipo de Gasto</h3>
+
+
+<EditForm Model="model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <InputText class="form-control" @bind-Value="model.Nombre" />
+    </div>
+
+    <button type="submit" class="btn btn-success me-2">Guardar</button>
+    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancelar</button>
+</EditForm>
+
+@code {
+    [Parameter] public Guid? Id { get; set; }
+    private TipoGastoFormDto model = new();
+    private bool isNew => !Id.HasValue;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id.HasValue)
+        {
+            var existing = await TipoGastoService.GetByIdAsync(Id.Value);
+            if (existing != null)
+            {
+                model.Id = existing.Id;
+                model.Nombre = existing.Nombre;
+            }
+            else
+            {
+                // Si el ID no existe, redirige de vuelta al listado
+                NavManager.NavigateTo("/tipogastos");
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (isNew)
+            await TipoGastoService.CreateAsync(model);
+        else
+            await TipoGastoService.UpdateAsync(model);
+
+        NavManager.NavigateTo("/tipogastos");
+    }
+
+    private void Cancel() => NavManager.NavigateTo("/tipogastos");
+}

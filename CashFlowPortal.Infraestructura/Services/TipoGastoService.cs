@@ -31,7 +31,7 @@ namespace CashFlowPortal.Infraestructura.Services
 
             return _mapper.Map<TipoGastoDto>(entity);
         }
-        public async Task CreateAsync(CreateTipoGastoDto dto)
+        public async Task CreateAsync(TipoGastoFormDto dto)
         {
             var tipo = _mapper.Map<TipoGasto>(dto);
             await _repository.AddAsync(tipo);
@@ -49,9 +49,9 @@ namespace CashFlowPortal.Infraestructura.Services
             return _mapper.Map<TipoGastoDto>(entity);
         }
 
-        public async Task UpdateAsync(UpdateTipoGastoDto dto)
+        public async Task UpdateAsync(TipoGastoFormDto dto)
         {
-            var entity = await _repository.GetByIdAsync(dto.Id);
+            var entity = await _repository.GetByIdAsync((Guid)dto.Id);
             if (entity == null) throw new KeyNotFoundException("Tipo de gasto no encontrado.");
 
             _mapper.Map(dto, entity);

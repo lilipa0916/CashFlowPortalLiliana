@@ -14,7 +14,7 @@ namespace CashFlowPortal.Applicacion.Mappings
             CreateMap<TipoGasto, TipoGastoDto>().ReverseMap();
             CreateMap<Usuario, LoginRequestDto>().ReverseMap();
             CreateMap<Presupuesto, PresupuestoDto>().ReverseMap();
-            CreateMap<CreateTipoGastoDto, TipoGasto>().ReverseMap();
+            CreateMap<TipoGastoFormDto, TipoGasto>().ReverseMap();
 
             CreateMap<CreateFondoMonetarioDto, FondoMonetario>().ReverseMap();
             CreateMap<FondoMonetario, FondoMonetarioDto>().ReverseMap();

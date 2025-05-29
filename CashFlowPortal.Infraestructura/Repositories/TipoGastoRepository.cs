@@ -16,8 +16,17 @@ namespace CashFlowPortal.Infraestructura.Repositories
 
         public async Task<TipoGasto> AddAsync(TipoGasto entity)
         {
-            _context.TiposGasto.Add(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.TiposGasto.Add(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
             return entity;
         }
 
@@ -33,8 +42,17 @@ namespace CashFlowPortal.Infraestructura.Repositories
 
         public async Task UpdateAsync(TipoGasto entity)
         {
-            _context.TiposGasto.Update(entity);
+            try
+            {
+   _context.TiposGasto.Update(entity);
             await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+         
         }
 
         public async Task DeleteAsync(Guid id)

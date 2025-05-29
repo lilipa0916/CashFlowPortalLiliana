@@ -98,7 +98,7 @@ namespace CashFlowPortal.UnitTests
         {
             // Arrange
             var id = Guid.NewGuid();
-            var dto = new UpdateTipoGastoDto { Id = id, Nombre = "Modificado" };
+            var dto = new TipoGastoFormDto { Id = id, Nombre = "Modificado" };
             var entity = new TipoGasto { Id = id, Nombre = "Modificado", Codigo = "TG004" };
 
             _repoMock.Setup(r => r.UpdateAsync(It.IsAny<TipoGasto>())).Returns(Task.CompletedTask);
