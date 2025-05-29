@@ -32,14 +32,19 @@ namespace CashFlowPortal.Infraestructura.Data
                 .HasForeignKey(d => d.GastoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //modelBuilder.Entity<Usuario>().HasData(new Usuario
-            //{
-            //    Id = 1,
-            //    Username = "admin",
-            //    Password = "admin", // Puedes encriptarlo más adelante
-            //});
+ 
 
             base.OnModelCreating(modelBuilder);
+
+            var adminId = Guid.NewGuid();
+            modelBuilder.Entity<Usuario>().HasData(new Usuario
+            {
+                Id = adminId,
+                Nombre = "Administrador",
+                UsuarioLogin = "admin",
+                ClaveHash = BCrypt.Net.BCrypt.HashPassword("admin"),
+                Rol = "Admin"
+            });
         }
     }
 }
