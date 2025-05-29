@@ -2,7 +2,7 @@
 {
     public class TipoGasto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Codigo { get; set; } = default!;
         public string Nombre { get; set; } = default!;
     }

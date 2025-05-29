@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.Interfaces.IServices
 {
-    internal interface IPresupuestoService
+    public interface IPresupuestoService
     {
     }
 }

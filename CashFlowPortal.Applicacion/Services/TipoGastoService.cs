@@ -1,72 +1,46 @@
 ﻿using AutoMapper;
-using CashFlowPortal.Applicacion.DTOs;
-using CashFlowPortal.Applicacion.Interfaces;
+using CashFlowPortal.Applicacion.DTOs.TipoGasto;
+using CashFlowPortal.Applicacion.Interfaces.IServices;
+using CashFlowPortal.Applicacion.Interfaces.Repository;
 using CashFlowPortal.Domain.Entities;
-using CashFlowPortal.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace CashFlowPortal.Applicacion.Services
 {
     public class TipoGastoService : ITipoGastoService
     {
-        private readonly AppDbContext _context;
+        private readonly ITipoGastoRepository _repository;
         private readonly IMapper _mapper;
-        public TipoGastoService(AppDbContext context, IMapper mapper)
+        public TipoGastoService(ITipoGastoRepository repository, IMapper mapper)
         {
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
+
         public async Task<IEnumerable<TipoGastoDto>> GetAllAsync()
         {
-            var tipos = await _context.TiposGasto.ToListAsync();
+            var tipos = await _repository.GetAllAsync();
             return _mapper.Map<IEnumerable<TipoGastoDto>>(tipos);
         }
 
         public async Task<TipoGastoDto?> GetByIdAsync(Guid id)
         {
-            var tipo = await _context.TiposGasto.FindAsync(id);
-            return tipo == null ? null : _mapper.Map<TipoGastoDto>(tipo);
+            var tipo = await _repository.GetByIdAsync(id);
+            return _mapper.Map<TipoGastoDto?>(tipo);
         }
 
-        public async Task<bool> CreateAsync(TipoGastoDto dto)
+        public async Task CreateAsync(CreateTipoGastoDto dto)
         {
             var tipo = _mapper.Map<TipoGasto>(dto);
-            tipo.Id = Guid.NewGuid(); // o manejo automático
-            tipo.Codigo = await ObtenerSiguienteCodigoAsync();
-
-            _context.TiposGasto.Add(tipo);
-            await _context.SaveChangesAsync();
-            return true;
+            await _repository.AddAsync(tipo);
         }
 
-        public async Task<bool> UpdateAsync(TipoGastoDto dto)
+        public async Task UpdateAsync(UpdateTipoGastoDto dto)
         {
-            var tipo = await _context.TiposGasto.FindAsync(dto.Id);
-            if (tipo == null) return false;
-
-            tipo.Nombre = dto.Nombre;
-            tipo.Descripcion = dto.Descripcion;
-
-            _context.TiposGasto.Update(tipo);
-            await _context.SaveChangesAsync();
-            return true;
+            var tipo = _mapper.Map<TipoGasto>(dto);
+            await _repository.UpdateAsync(tipo);
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
-        {
-            var tipo = await _context.TiposGasto.FindAsync(id);
-            if (tipo == null) return false;
+        public async Task DeleteAsync(Guid id) => await _repository.DeleteAsync(id);
 
-            _context.TiposGasto.Remove(tipo);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        private async Task<int> ObtenerSiguienteCodigoAsync()
-        {
-            var ultimo = await _context.TiposGasto.OrderByDescending(t => t.Codigo).FirstOrDefaultAsync();
-            return (ultimo?.Codigo ?? 0) + 1;
-        }
     }
 }

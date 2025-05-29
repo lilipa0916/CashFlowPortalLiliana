@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.DTOs.TipoGasto
 {
-    internal class TipoGastoDto
+    public class TipoGastoDto
     {
+        public Guid Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
     }
 }

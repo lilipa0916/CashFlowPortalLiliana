@@ -1,9 +1,10 @@
 ﻿using CashFlowPortal.Applicacion.DTOs;
+using CashFlowPortal.Applicacion.DTOs.TipoGasto;
 using FluentValidation;
 
 namespace CashFlowPortal.Applicacion.Validator
 {
-    public class TipoGastoValidator : AbstractValidator<TipoGastoDto>
+    public class TipoGastoValidator : AbstractValidator<CreateTipoGastoDto>
     {
         public TipoGastoValidator()
         {

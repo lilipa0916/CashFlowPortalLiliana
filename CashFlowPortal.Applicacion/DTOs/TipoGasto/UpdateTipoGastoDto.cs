@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.DTOs.TipoGasto
 {
-    internal class UpdateTipoGastoDto
+    public   class UpdateTipoGastoDto : CreateTipoGastoDto
     {
+        public Guid Id { get; set; }
     }
 }
