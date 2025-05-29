@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.Interfaces.IRepository
 {
-    internal interface IPresupuestoRepository
+    public interface IPresupuestoRepository
     {
     }
 }

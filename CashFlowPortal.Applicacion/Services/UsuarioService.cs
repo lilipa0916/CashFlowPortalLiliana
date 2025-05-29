@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.Services
 {
-    internal class UsuarioService
+    public class UsuarioService
     {
     }
 }

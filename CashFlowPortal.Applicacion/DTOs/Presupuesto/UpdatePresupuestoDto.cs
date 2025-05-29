@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.DTOs.Presupuesto
 {
-    internal class UpdatePresupuestoDto
+    public class UpdatePresupuestoDto
     {
     }
 }
