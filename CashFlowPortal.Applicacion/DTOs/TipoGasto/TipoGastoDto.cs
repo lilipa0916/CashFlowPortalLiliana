@@ -10,5 +10,6 @@ namespace CashFlowPortal.Applicacion.DTOs.TipoGasto
     {
         public Guid Id { get; set; }
         public string Nombre { get; set; } = string.Empty;
+        public string Codigo { get; set; } = null!;
     }
 }

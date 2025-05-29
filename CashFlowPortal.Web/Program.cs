@@ -28,10 +28,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();
 
 //Servicios
 builder.Services.AddScoped<ITipoGastoService, TipoGastoService>();
+builder.Services.AddScoped<IFondoMonetarioService, FondoMonetarioService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 //Repositorios
 builder.Services.AddScoped<ITipoGastoRepository, TipoGastoRepository>();
+builder.Services.AddScoped<IFondoMonetarioRepository, FondoMonetarioRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 // AutoMapper
