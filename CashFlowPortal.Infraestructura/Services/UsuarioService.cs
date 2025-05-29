@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using BCrypt.Net;
-using CashFlowPortal.Applicacion.DTOs;
-using CashFlowPortal.Applicacion.Interfaces;
-using CashFlowPortal.Domain.Entities;
+using CashFlowPortal.Applicacion.DTOs.Usuario;
+using CashFlowPortal.Applicacion.Interfaces.IRepository;
+using CashFlowPortal.Applicacion.Interfaces.Services;
 using CashFlowPortal.Infraestructura.Data;
-using CashFlowPortal.Infraestructura.Persistencia;
 using Microsoft.EntityFrameworkCore;
 
 namespace CashFlowPortal.Infraestructura.Services
@@ -13,8 +11,8 @@ namespace CashFlowPortal.Infraestructura.Services
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMapper _mapper;
-        private readonly ApplicationDbContext _context;
-        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, ApplicationDbContext context)
+        private readonly AppDbContext _context;
+        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, AppDbContext context)
         {
             _usuarioRepository = usuarioRepository;
             _context = context;

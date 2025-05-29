@@ -3,55 +3,64 @@ using CashFlowPortal.Applicacion.DTOs.TipoGasto;
 using CashFlowPortal.Applicacion.Interfaces.IServices;
 using CashFlowPortal.Applicacion.Interfaces.Repository;
 using CashFlowPortal.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CashFlowPortal.Applicacion.Services
+namespace CashFlowPortal.Infraestructura.Services
 {
     public class TipoGastoService : ITipoGastoService
     {
         private readonly ITipoGastoRepository _repository;
         private readonly IMapper _mapper;
+
         public TipoGastoService(ITipoGastoRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TipoGastoDto>> GetAllAsync()
-        {
-            var tipos = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<TipoGastoDto>>(tipos);
-        }
-
-        public async Task<TipoGastoDto?> GetByIdAsync(Guid id)
-        {
-            var tipo = await _repository.GetByIdAsync(id);
-            return _mapper.Map<TipoGastoDto?>(tipo);
-        }
         public async Task<TipoGastoDto> CreateAsync(TipoGastoDto dto)
         {
             var entity = _mapper.Map<TipoGasto>(dto);
-
-            // Suponiendo que el repositorio genera el código automáticamente
             entity.Codigo = await _repository.GenerarCodigoAsync();
 
             await _repository.AddAsync(entity);
 
             return _mapper.Map<TipoGastoDto>(entity);
         }
-
         public async Task CreateAsync(CreateTipoGastoDto dto)
         {
             var tipo = _mapper.Map<TipoGasto>(dto);
             await _repository.AddAsync(tipo);
         }
 
-        public async Task UpdateAsync(UpdateTipoGastoDto dto)
+        public async Task<IEnumerable<TipoGastoDto>> GetAllAsync()
         {
-            var tipo = _mapper.Map<TipoGasto>(dto);
-            await _repository.UpdateAsync(tipo);
+            var entities = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<TipoGastoDto>>(entities);
         }
 
-        public async Task DeleteAsync(Guid id) => await _repository.DeleteAsync(id);
+        public async Task<TipoGastoDto> GetByIdAsync(Guid id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+            return _mapper.Map<TipoGastoDto>(entity);
+        }
 
+        public async Task UpdateAsync(UpdateTipoGastoDto dto)
+        {
+            var entity = await _repository.GetByIdAsync(dto.Id);
+            if (entity == null) throw new KeyNotFoundException("Tipo de gasto no encontrado.");
+
+            _mapper.Map(dto, entity);
+            await _repository.UpdateAsync(entity);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            await _repository.DeleteAsync(id);
+        }
     }
 }

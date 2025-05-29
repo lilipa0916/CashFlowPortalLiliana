@@ -13,32 +13,47 @@ namespace CashFlowPortal.Infraestructura.Repositories
             _context = context;
         }
 
+        public async Task<TipoGasto> AddAsync(TipoGasto entity)
+        {
+            _context.TiposGasto.Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
         public async Task<IEnumerable<TipoGasto>> GetAllAsync()
-            => await _context.TiposGasto.ToListAsync();
-
-        public async Task<TipoGasto?> GetByIdAsync(Guid id)
-            => await _context.TiposGasto.FindAsync(id);
-
-        public async Task AddAsync(TipoGasto tipoGasto)
         {
-            _context.TiposGasto.Add(tipoGasto);
+            return await _context.TiposGasto.ToListAsync();
+        }
+
+        public async Task<TipoGasto> GetByIdAsync(int id)
+        {
+            return await _context.TiposGasto.FindAsync(id);
+        }
+
+        public async Task UpdateAsync(TipoGasto entity)
+        {
+            _context.TiposGasto.Update(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(TipoGasto tipoGasto)
+        public async Task DeleteAsync(int id)
         {
-            _context.TiposGasto.Update(tipoGasto);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(Guid id)
-        {
-            var tipo = await _context.TiposGasto.FindAsync(id);
-            if (tipo is not null)
+            var entity = await _context.TiposGasto.FindAsync(id);
+            if (entity != null)
             {
-                _context.TiposGasto.Remove(tipo);
+                _context.TiposGasto.Remove(entity);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<string> GenerarCodigoAsync()
+        {
+            var ultimo = await _context.TiposGasto
+                .OrderByDescending(x => x.Id)
+                .FirstOrDefaultAsync();
+
+            int secuencia = (ultimo != null && int.TryParse(ultimo.Codigo?.Substring(2), out var n)) ? n + 1 : 1;
+            return $"TG{secuencia:D3}";
         }
     }
 }

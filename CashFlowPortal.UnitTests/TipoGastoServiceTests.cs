@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using CashFlowPortal.Applicacion.DTOs.TipoGasto;
+using CashFlowPortal.Applicacion.Interfaces.Repository;
 using CashFlowPortal.Applicacion.Services;
 using CashFlowPortal.Domain.Entities;
-using CashFlowPortal.Infraestructura.Repositories;
+using Moq;
 
 namespace CashFlowPortal.UnitTests
 {
     public class TipoGastoServiceTests
     {
-        private readonly Mock<TipoGastoRepository> _repoMock = new();
+        private readonly Mock<ITipoGastoRepository> _repoMock = new();
         private readonly IMapper _mapper;
 
         public TipoGastoServiceTests()
