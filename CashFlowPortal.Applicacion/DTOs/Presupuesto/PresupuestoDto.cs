@@ -9,17 +9,11 @@ namespace CashFlowPortal.Applicacion.DTOs.Presupuesto
 {
     public class PresupuestoDto
     {
-        public int Id { get; set; }
-        public int UsuarioId { get; set; }
-        public int TipoGastoId { get; set; }
-        [Required]
-        [Range(0.01, double.MaxValue)]
+        public Guid Id { get; set; }
+        public Guid UsuarioId { get; set; }
+        public Guid TipoGastoId { get; set; }
+        public DateTime Mes { get; set; }
         public decimal Monto { get; set; }
-
-        [Required]
-        public int Mes { get; set; }
-        [Required]
-
-        public int Anio { get; set; }
+        public List<PresupuestoDetalleDto> Detalles { get; set; } = new();
     }
 }

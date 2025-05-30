@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.DTOs.Presupuesto
 {
-    public class DetallePresupuestoDto
+    public class PresupuestoDetalleDto
     {
-        public int Id { get; set; }
-        public DateTime Mes { get; set; }
-
-        public List<DetallePresupuestoDto> Detalles { get; set; }
+        public Guid Id { get; set; }
+        public Guid TipoGastoId { get; set; }
+        public decimal MontoPresupuestado { get; set; }
     }
 }

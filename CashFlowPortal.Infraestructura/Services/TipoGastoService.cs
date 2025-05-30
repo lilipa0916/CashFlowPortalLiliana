@@ -37,10 +37,10 @@ namespace CashFlowPortal.Infraestructura.Services
             await _repository.AddAsync(tipo);
         }
 
-        public async Task<IEnumerable<TipoGastoDto>> GetAllAsync()
+        public async Task<List<TipoGastoDto>> GetAllAsync()
         {
             var entities = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<TipoGastoDto>>(entities);
+            return _mapper.Map<List<TipoGastoDto>>(entities);
         }
 
         public async Task<TipoGastoDto> GetByIdAsync(Guid id)

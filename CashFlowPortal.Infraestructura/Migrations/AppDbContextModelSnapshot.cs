@@ -46,30 +46,6 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     b.ToTable("Depositos");
                 });
 
-            modelBuilder.Entity("CashFlowPortal.Domain.Entities.DetallePresupuesto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("MontoPresupuestado")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("PresupuestoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TipoGastoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PresupuestoId");
-
-                    b.HasIndex("TipoGastoId");
-
-                    b.ToTable("DetallePresupuesto");
-                });
-
             modelBuilder.Entity("CashFlowPortal.Domain.Entities.FondoMonetario", b =>
                 {
                     b.Property<int>("Id")
@@ -167,7 +143,8 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<DateTime>("Mes")
                         .HasColumnType("datetime2");
@@ -175,10 +152,7 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("TipoGastoId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TipoGastoId1")
+                    b.Property<Guid>("TipoGastoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UsuarioId")
@@ -186,11 +160,37 @@ namespace CashFlowPortal.Infraestructura.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TipoGastoId1");
+                    b.HasIndex("TipoGastoId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioId", "TipoGastoId", "Mes")
+                        .IsUnique();
 
                     b.ToTable("Presupuestos");
+                });
+
+            modelBuilder.Entity("CashFlowPortal.Domain.Entities.PresupuestoDetalle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<decimal>("MontoPresupuestado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("PresupuestoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TipoGastoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PresupuestoId");
+
+                    b.HasIndex("TipoGastoId");
+
+                    b.ToTable("PresupuestoDetalle");
                 });
 
             modelBuilder.Entity("CashFlowPortal.Domain.Entities.TipoGasto", b =>
@@ -260,25 +260,6 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     b.Navigation("FondoMonetario");
                 });
 
-            modelBuilder.Entity("CashFlowPortal.Domain.Entities.DetallePresupuesto", b =>
-                {
-                    b.HasOne("CashFlowPortal.Domain.Entities.Presupuesto", "Presupuesto")
-                        .WithMany("Detalles")
-                        .HasForeignKey("PresupuestoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CashFlowPortal.Domain.Entities.TipoGasto", "TipoGasto")
-                        .WithMany()
-                        .HasForeignKey("TipoGastoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Presupuesto");
-
-                    b.Navigation("TipoGasto");
-                });
-
             modelBuilder.Entity("CashFlowPortal.Domain.Entities.Gasto", b =>
                 {
                     b.HasOne("CashFlowPortal.Domain.Entities.FondoMonetario", "FondoMonetario")
@@ -313,7 +294,7 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 {
                     b.HasOne("CashFlowPortal.Domain.Entities.TipoGasto", "TipoGasto")
                         .WithMany()
-                        .HasForeignKey("TipoGastoId1")
+                        .HasForeignKey("TipoGastoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -326,6 +307,25 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     b.Navigation("TipoGasto");
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("CashFlowPortal.Domain.Entities.PresupuestoDetalle", b =>
+                {
+                    b.HasOne("CashFlowPortal.Domain.Entities.Presupuesto", "Presupuesto")
+                        .WithMany("Detalles")
+                        .HasForeignKey("PresupuestoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CashFlowPortal.Domain.Entities.TipoGasto", "TipoGasto")
+                        .WithMany()
+                        .HasForeignKey("TipoGastoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Presupuesto");
+
+                    b.Navigation("TipoGasto");
                 });
 
             modelBuilder.Entity("CashFlowPortal.Domain.Entities.Gasto", b =>

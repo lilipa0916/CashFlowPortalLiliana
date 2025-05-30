@@ -9,11 +9,12 @@ namespace CashFlowPortal.UnitTests
         [Fact]
         public void Monto_Presupuesto_Deberia_Ser_Positivo()
         {
+            Guid TipoGastoId = new Guid("00000000-0000-0000-0000-000000000001");
             var presupuesto = new PresupuestoDto
             {
                 Monto = -5,
-                TipoGastoId = 1,
-                Mes = DateTime.Now.Month
+                TipoGastoId = TipoGastoId,
+                Mes = DateTime.Now
             };
 
             var context = new ValidationContext(presupuesto);

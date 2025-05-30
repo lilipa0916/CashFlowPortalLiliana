@@ -10,6 +10,6 @@ namespace CashFlowPortal.Applicacion.DTOs.Presupuesto
     {
         public int UsuarioId { get; set; }
         public DateTime Mes { get; set; }
-        public List<DetallePresupuestoDto> Detalles { get; set; } = new();
+        public List<PresupuestoDetalleDto> Detalles { get; set; } = new();
     }
 }

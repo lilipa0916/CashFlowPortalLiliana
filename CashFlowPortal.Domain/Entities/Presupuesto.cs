@@ -4,7 +4,8 @@
     {
         public Guid Id { get; set; }
         public Guid UsuarioId { get; set; }
-        public int TipoGastoId { get; set; }
+        public Guid TipoGastoId { get; set; }
+
         /// <summary>
         /// Solo se usa año/mes
         /// </summary>
@@ -12,7 +13,7 @@
         public decimal Monto { get; set; }
         
         public Usuario Usuario { get; set; }
-        public List<DetallePresupuesto> Detalles { get; set; } = new();
+        public List<PresupuestoDetalle> Detalles { get; set; } = new();
         public TipoGasto TipoGasto { get; set; } = null!;
     }
 }

@@ -12,6 +12,8 @@ namespace CashFlowPortal.Infraestructura.Data
         public DbSet<TipoGasto> TiposGasto => Set<TipoGasto>();
         public DbSet<FondoMonetario> Fondos => Set<FondoMonetario>();
         public DbSet<Presupuesto> Presupuestos => Set<Presupuesto>();
+
+        public DbSet<PresupuestoDetalle> PresupuestoDetalle => Set<PresupuestoDetalle>();
         public DbSet<Gasto> Gastos => Set<Gasto>();
         public DbSet<GastoDetalle> GastoDetalles => Set<GastoDetalle>();
         public DbSet<Deposito> Depositos => Set<Deposito>();
@@ -31,13 +33,32 @@ namespace CashFlowPortal.Infraestructura.Data
                 .HasForeignKey(d => d.GastoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<DetallePresupuesto>()
+            modelBuilder.Entity<Presupuesto>(b =>
+            {
+                b.HasKey(p => p.Id);
+                b.Property(p => p.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWID()");
+                b.Property(p => p.Mes).IsRequired();
+                b.Property(p => p.Monto).HasColumnType("decimal(18,2)");
+                b.HasIndex(p => new { p.UsuarioId, p.TipoGastoId, p.Mes }).IsUnique();
+                b.HasMany(p => p.Detalles)
+                 .WithOne(d => d.Presupuesto)
+                 .HasForeignKey(d => d.PresupuestoId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<PresupuestoDetalle>(b =>
+            {
+                b.HasKey(d => d.Id);
+                b.Property(d => d.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWID()");
+                b.Property(d => d.MontoPresupuestado).HasColumnType("decimal(18,2)");
+            });
+
+            modelBuilder.Entity<PresupuestoDetalle>()
                .HasOne(dp => dp.TipoGasto)
                .WithMany()
                .HasForeignKey(dp => dp.TipoGastoId)
                .OnDelete(DeleteBehavior.Restrict); // 👈 importante
 
-            modelBuilder.Entity<DetallePresupuesto>()
+            modelBuilder.Entity<PresupuestoDetalle>()
                 .HasOne(dp => dp.Presupuesto)
                 .WithMany(p => p.Detalles)
                 .HasForeignKey(dp => dp.PresupuestoId)

@@ -6,7 +6,7 @@ namespace CashFlowPortal.Applicacion.Interfaces.IServices
     {
         Task<TipoGastoDto> CreateAsync(TipoGastoDto dto);
         Task CreateAsync(TipoGastoFormDto dto);
-        Task<IEnumerable<TipoGastoDto>> GetAllAsync();
+        Task<List<TipoGastoDto>> GetAllAsync();
         Task<TipoGastoDto> GetByIdAsync(Guid id);
         Task UpdateAsync(TipoGastoFormDto dto);
         Task DeleteAsync(Guid id);

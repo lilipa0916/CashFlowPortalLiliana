@@ -16,10 +16,10 @@ namespace CashFlowPortal.Applicacion.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TipoGastoDto>> GetAllAsync()
+        public async Task<List<TipoGastoDto>> GetAllAsync()
         {
             var tipos = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<TipoGastoDto>>(tipos);
+            return _mapper.Map<List<TipoGastoDto>>(tipos);
         }
 
         public async Task<TipoGastoDto?> GetByIdAsync(Guid id)

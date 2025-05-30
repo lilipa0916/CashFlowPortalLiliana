@@ -26,18 +26,22 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//Validaciones
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PresupuestoValidator>();
 
 //Servicios
 builder.Services.AddScoped<ITipoGastoService, TipoGastoService>();
 builder.Services.AddScoped<IFondoMonetarioService, FondoMonetarioService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IPresupuestoService, PresupuestoService>();
 
 //Repositorios
 builder.Services.AddScoped<ITipoGastoRepository, TipoGastoRepository>();
 builder.Services.AddScoped<IFondoMonetarioRepository, FondoMonetarioRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IPresupuestoRepository, PresupuestoRepository>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

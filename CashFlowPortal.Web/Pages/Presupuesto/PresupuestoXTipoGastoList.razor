@@ -1,0 +1,112 @@
+﻿@page "/movimientos/presupuesto"
+@using CashFlowPortal.Applicacion.DTOs
+@using CashFlowPortal.Applicacion.Interfaces
+@using CashFlowPortal.Applicacion.DTOs.Presupuesto
+@using CashFlowPortal.Applicacion.DTOs.TipoGasto
+
+@inject IPresupuestoService PresupuestoService
+@inject ITipoGastoService TipoGastoService
+@inject NavigationManager Nav
+
+
+<h3>PresupuestoXTipoGastoList</h3>
+
+
+<div class="container mt-4">
+    <h3>Presupuestos por Tipo de Gasto (@mes.ToString("yyyy-MM"))</h3>
+
+    <div class="row mb-3">
+        <div class="col-auto">
+            <label class="form-label">Mes:</label>
+            <InputDate @bind-Value="mes" class="form-control" />
+        </div>
+        <div class="col-auto align-self-end">
+            <button class="btn btn-primary" @onclick="Cargar">Cargar</button>
+        </div>
+    </div>
+
+    @if (presupuestoList == null)
+    {
+        <p>Seleccione un mes y pulse Cargar.</p>
+    }
+    else
+    {
+        <EditForm Model="presupuestoList" OnValidSubmit="Guardar">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tipo de Gasto</th>
+                        <th>Monto Presupuestado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in presupuestoList)
+                    {
+                        <tr>
+                            <td>
+                                @tipos.FirstOrDefault(t => t.Id == p.TipoGastoId)?.Nombre
+                            </td>
+                            <td>
+                                <InputNumber @bind-Value="p.Monto" class="form-control" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-success">Guardar Presupuestos</button>
+        </EditForm>
+    }
+</div>
+
+@code {
+    // Usuario fijo de ejemplo; reemplaza por tu lógica de usuario actual
+    private readonly Guid usuarioId = new Guid("00000000-0000-0000-0000-000000000001");
+
+    private DateTime mes = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+    private List<PresupuestoDto>? presupuestoList;
+    private List<TipoGastoDto> tipos = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        tipos = await TipoGastoService.GetAllAsync();
+    }
+
+    private async Task Cargar()
+    {
+        // Trae los existentes
+        var existentes = await PresupuestoService.GetByMesAsync(usuarioId, mes);
+
+        if (existentes == null || !existentes.Any())
+        {
+            // Inicializa uno por cada tipo de gasto
+            presupuestoList = tipos
+                .Select(t => new PresupuestoDto
+                {
+                    Id = Guid.Empty,
+                    UsuarioId = usuarioId,
+                    TipoGastoId = t.Id,
+                    Mes = mes,
+                    Monto = 0m
+                })
+                .ToList();
+        }
+        else
+        {
+            presupuestoList = existentes;
+        }
+    }
+
+    private async Task Guardar()
+    {
+        if (presupuestoList == null) return;
+
+        foreach (var dto in presupuestoList)
+        {
+            await PresupuestoService.AddOrUpdateAsync(dto);
+        }
+        Nav.NavigateTo("/");
+    }
+}

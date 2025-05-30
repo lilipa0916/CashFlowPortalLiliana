@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CashFlowPortal.Domain.Entities
+﻿namespace CashFlowPortal.Domain.Entities
 {
-    public class DetallePresupuesto
+    public class PresupuestoDetalle
     {
         public Guid Id { get; set; }
         public Guid PresupuestoId { get; set; }
