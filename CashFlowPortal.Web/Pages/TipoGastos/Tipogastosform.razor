@@ -1,26 +1,33 @@
 ﻿@page "/tipogastos/form/{Id:guid?}"
-@using CashFlowPortal.Applicacion.DTOs.TipoGasto
-@using CashFlowPortal.Applicacion.Interfaces.IServices
 
 @inject ITipoGastoService TipoGastoService
 @inject NavigationManager NavManager
 
-<h3>@(Id.HasValue ? "Editar" : "Nuevo") Tipo de Gasto</h3>
 
 
-<EditForm Model="model" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>@(Id.HasValue ? "Editar" : "Nuevo") Tipo de Gasto</h3>
+        </div>
+        <div class="card-body">
+            <EditForm Model="model" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
 
-    <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <InputText class="form-control" @bind-Value="model.Nombre" />
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <InputText class="form-control" @bind-Value="model.Nombre" />
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success me-2">Guardar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancelar</button>
+                </div>
+
+            </EditForm>
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-success me-2">Guardar</button>
-    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancelar</button>
-</EditForm>
-
+</div>
 @code {
     [Parameter] public Guid? Id { get; set; }
     private TipoGastoFormDto model = new();

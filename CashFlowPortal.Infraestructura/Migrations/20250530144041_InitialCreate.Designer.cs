@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashFlowPortal.Infraestructura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250530034412_InitialCreate")]
+    [Migration("20250530144041_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

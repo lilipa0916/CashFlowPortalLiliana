@@ -13,10 +13,11 @@ namespace CashFlowPortal.Applicacion.Services
         private readonly IMapper _mapper;
         private readonly IValidator<FondoMonetarioDto> _validator;
 
-        public FondoMonetarioService(IFondoMonetarioRepository repo, IMapper mapper)
+        public FondoMonetarioService(IFondoMonetarioRepository repo, IMapper mapper, IValidator<FondoMonetarioDto> validator)
         {
             _repo = repo;
             _mapper = mapper;
+            _validator = validator;
         }
         public async Task<List<FondoMonetarioDto>> GetAllAsync()
         {
