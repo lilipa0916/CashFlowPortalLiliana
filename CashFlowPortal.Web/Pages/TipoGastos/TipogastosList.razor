@@ -41,9 +41,16 @@
                     <tr>
                         <td>@item.Codigo</td>
                         <td>@item.Nombre</td>
-                        <td>
-                            <button class="btn btn-sm btn-secondary me-1" @onclick="() => Edit(item.Id)">Editar</button>
-                            <button class="btn btn-sm btn-danger" @onclick="() => Delete(item.Id)">Eliminar</button>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-secondary me-1" @onclick="() => Edit(item.Id)"> <i class="bi bi-pencil"></i></button>
+                             @* <button class="btn btn-sm btn-danger" @onclick="() => Delete(item.Id)">Eliminar</button> 
+
+                            <NavLink class="btn btn-sm btn-secondary me-1" href="/tipogastos/form/{item.id}">
+                                <i class="bi bi-pencil"></i>
+                            </NavLink>*@
+                            <button class="btn btn-sm btn-danger" @onclick="() => Delete(item.Id)">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 }

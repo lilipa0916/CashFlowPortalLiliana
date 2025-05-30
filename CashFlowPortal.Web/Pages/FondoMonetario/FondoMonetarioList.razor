@@ -45,15 +45,15 @@
                         <td>@f.Saldo.ToString("C", CultureInfo.InvariantCulture)</td>
                         <td>@f.FechaCreacion.ToString("yyyy-MM-dd HH:mm")</td>
                         <td class="text-end">
-                            <NavLink class="btn btn-sm btn-secondary me-1" href="fondos/editar/{f.Id}">
+                           @*  <NavLink class="btn btn-sm btn-secondary me-1" href="fondos/editar/{f.Id}">
                                 <i class="bi bi-pencil"></i>
-                            </NavLink>
+                            </NavLink> *@
+                             <button class="btn btn-sm btn-secondary me-1" @onclick="() => Edit(f.Id)">  <i class="bi bi-pencil"></i></button>
                             <button class="btn btn-sm btn-danger" @onclick="() => Eliminar(f.Id)">
                                 <i class="bi bi-trash"></i>
                             </button>
 
-                            <button class="btn btn-sm btn-secondary me-1" @onclick="() => Edit(f.Id)">Editar</button>
-                            <button class="btn btn-sm btn-danger" @onclick="() => Eliminar(f.Id)">Eliminar</button>
+                         
 
                         </td>
                     </tr>
