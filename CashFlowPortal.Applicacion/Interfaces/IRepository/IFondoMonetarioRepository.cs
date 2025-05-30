@@ -9,10 +9,10 @@ namespace CashFlowPortal.Applicacion.Interfaces.IRepository
 {
     public interface IFondoMonetarioRepository
     {
-        Task<FondoMonetario> AddAsync(FondoMonetario entity);
-        Task<IEnumerable<FondoMonetario>> GetAllAsync();
-        Task<FondoMonetario?> GetByIdAsync(Guid id);
+        Task AddAsync(FondoMonetario entity);
+        Task<List<FondoMonetario>> GetAllAsync();
+        Task<FondoMonetario?> GetByIdAsync(int id);
         Task UpdateAsync(FondoMonetario entity);
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(int id);
     }
 }

@@ -19,24 +19,12 @@ namespace CashFlowPortal.Infraestructura.Data
         public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<TipoGasto>()
-            //   .Property(t => t.Codigo)
-            //   .HasComputedColumnSql("'TG' + FORMAT(NEXT VALUE FOR Seq_TipoGasto, 'D3')");
+         
            
             modelBuilder.Entity<TipoGasto>()
                 .HasKey(t => t.Id);
 
-            // Si quieres usar SEQUENCE en vez de cálculo en código, descomenta:
-            //
-            // modelBuilder.HasSequence<int>("Seq_TipoGasto")
-            //     .StartsAt(1)
-            //     .IncrementsBy(1);
-            //
-            // modelBuilder.Entity<TipoGasto>()
-            //     .Property(t => t.Codigo)
-            //     .HasComputedColumnSql("'TG' + FORMAT(NEXT VALUE FOR Seq_TipoGasto, 'D3')");
-
-
+           
             modelBuilder.Entity<GastoDetalle>()
                 .HasOne(d => d.Gasto)
                 .WithMany(g => g.Detalles)
@@ -54,6 +42,32 @@ namespace CashFlowPortal.Infraestructura.Data
                 .WithMany(p => p.Detalles)
                 .HasForeignKey(dp => dp.PresupuestoId)
                 .OnDelete(DeleteBehavior.Cascade); // solo uno con cascade
+
+
+            // FondoMonetario
+            modelBuilder.Entity<FondoMonetario>(b =>
+            {
+                b.HasKey(f => f.Id);
+                // Configurar Id como columna de identidad (auto-incremental)
+                b.Property(f => f.Id)
+                 .ValueGeneratedOnAdd()
+                 .UseIdentityColumn();
+
+                b.Property(f => f.Nombre)
+                 .IsRequired()
+                 .HasMaxLength(100);
+
+                b.Property(f => f.Tipo)
+                 .IsRequired()
+                 .HasMaxLength(50);
+
+                b.Property(f => f.Saldo)
+                 .HasColumnType("decimal(18,2)");
+
+                b.Property(f => f.FechaCreacion)
+                 .HasDefaultValueSql("GETUTCDATE()");
+            });
+
 
             base.OnModelCreating(modelBuilder);
 

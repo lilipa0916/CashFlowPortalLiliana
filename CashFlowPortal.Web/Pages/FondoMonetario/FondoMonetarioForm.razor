@@ -1,0 +1,89 @@
+﻿@page "/fondos/crear"
+@page "/fondos/editar/{Id:int}"
+
+@using CashFlowPortal.Applicacion.DTOs.FondoMonetario
+@using CashFlowPortal.Applicacion.Interfaces.IServices
+
+@inject IFondoMonetarioService Repo
+@inject NavigationManager Nav
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">@((Id == null || Id == 0) ? "Crear Fondo Monetario" : "Editar Fondo Monetario")</h4>
+        </div>
+        <div class="card-body">
+            <EditForm Model="model" OnValidSubmit="Guardar">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <InputText class="form-control" @bind-Value="model.Nombre" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Tipo</label>
+                    <InputText class="form-control" @bind-Value="model.Tipo" placeholder="e.g. Banco, Caja chica" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Saldo</label>
+                    <InputNumber class="form-control" @bind-Value="model.Saldo" />
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary me-2" @onclick="Volver">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        Guardar
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    private FondoMonetarioDto model = new();
+
+    private bool esEdicion => Id.HasValue && Id.Value != 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (esEdicion)
+        {
+            var existing = await Repo.GetByIdAsync(Id!.Value);
+            if (existing != null)
+            {
+                model = existing;
+            }
+            else
+            {
+                // Si no existe el registro, redirige a la lista
+                Nav.NavigateTo("/fondos");
+            }
+        }
+        else
+        {
+            // Inicializa fecha de creación si aplica
+            model.FechaCreacion = DateTime.UtcNow;
+        }
+    }
+
+    private async Task Guardar()
+    {
+        if (esEdicion)
+            await Repo.UpdateAsync(Id!.Value, model);
+        else
+            await Repo.CreateAsync(model);
+
+        Nav.NavigateTo("/fondos");
+    }
+
+    private void Volver() => Nav.NavigateTo("/fondos");
+}

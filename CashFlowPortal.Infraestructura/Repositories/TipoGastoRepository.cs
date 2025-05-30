@@ -18,6 +18,10 @@ namespace CashFlowPortal.Infraestructura.Repositories
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(entity.Codigo))
+                {
+                    entity.Codigo = await GenerarCodigoAsync();
+                }
                 _context.TiposGasto.Add(entity);
                 await _context.SaveChangesAsync();
             }

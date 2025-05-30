@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CashFlowPortal.Applicacion.Validator
 {
-    public class CreateFondoMonetarioValidator : AbstractValidator<CreateFondoMonetarioDto>
+    public class CreateFondoMonetarioValidator : AbstractValidator<FondoMonetarioDto>
     {
         public CreateFondoMonetarioValidator()
         {
@@ -16,8 +16,8 @@ namespace CashFlowPortal.Applicacion.Validator
                 .NotEmpty().WithMessage("El nombre es obligatorio.")
                 .MaximumLength(100);
 
-            RuleFor(x => x.Descripcion)
-                .MaximumLength(200);
+            RuleFor(x => x.Tipo).NotEmpty().MaximumLength(50);
+            RuleFor(x => x.Saldo).GreaterThanOrEqualTo(0);
         }
     }
 }

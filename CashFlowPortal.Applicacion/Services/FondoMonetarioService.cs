@@ -3,6 +3,7 @@ using CashFlowPortal.Applicacion.DTOs.FondoMonetario;
 using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.IServices;
 using CashFlowPortal.Domain.Entities;
+using FluentValidation;
 
 namespace CashFlowPortal.Applicacion.Services
 {
@@ -10,29 +11,33 @@ namespace CashFlowPortal.Applicacion.Services
     {
         private readonly IFondoMonetarioRepository _repo;
         private readonly IMapper _mapper;
+        private readonly IValidator<FondoMonetarioDto> _validator;
 
         public FondoMonetarioService(IFondoMonetarioRepository repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
         }
-
-        public async Task<FondoMonetarioDto> CreateAsync(CreateFondoMonetarioDto dto)
+        public async Task<List<FondoMonetarioDto>> GetAllAsync()
         {
+            var list = await _repo.GetAllAsync();
+            return _mapper.Map<List<FondoMonetarioDto>>(list);
+        }
+        public async Task<int> CreateAsync(FondoMonetarioDto dto)
+        {
+            await _validator.ValidateAndThrowAsync(dto);
             var entity = _mapper.Map<FondoMonetario>(dto);
-            var created = await _repo.AddAsync(entity);
-            return _mapper.Map<FondoMonetarioDto>(created);
+            // FechaCreacion se asigna en repositorio si es default
+            await _repo.AddAsync(entity);
+            return entity.Id;
         }
 
-        public async Task DeleteAsync(Guid id) => await _repo.DeleteAsync(id);
+        public async Task DeleteAsync(int id) => await _repo.DeleteAsync(id);
 
-        public async Task<IEnumerable<FondoMonetarioDto>> GetAllAsync()
-            => _mapper.Map<IEnumerable<FondoMonetarioDto>>(await _repo.GetAllAsync());
-
-        public async Task<FondoMonetarioDto?> GetByIdAsync(Guid id)
+        public async Task<FondoMonetarioDto?> GetByIdAsync(int id)
             => _mapper.Map<FondoMonetarioDto?>(await _repo.GetByIdAsync(id));
 
-        public async Task UpdateAsync(Guid id, CreateFondoMonetarioDto dto)
+        public async Task UpdateAsync(int id, FondoMonetarioDto dto)
         {
             var entity = await _repo.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException("FondoMonetario no encontrado");

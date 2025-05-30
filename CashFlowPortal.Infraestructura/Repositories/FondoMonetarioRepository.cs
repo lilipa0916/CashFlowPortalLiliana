@@ -10,14 +10,13 @@ namespace CashFlowPortal.Infraestructura.Repositories
         private readonly AppDbContext _context;
         public FondoMonetarioRepository(AppDbContext context) => _context = context;
 
-        public async Task<FondoMonetario> AddAsync(FondoMonetario entity)
+        public async Task AddAsync(FondoMonetario entity)
         {
             await _context.Fondos.AddAsync(entity);
             await _context.SaveChangesAsync();
-            return entity;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(int id)
         {
             var e = await _context.Fondos.FindAsync(id);
             if (e != null)
@@ -27,10 +26,10 @@ namespace CashFlowPortal.Infraestructura.Repositories
             }
         }
 
-        public async Task<IEnumerable<FondoMonetario>> GetAllAsync()
+        public async Task<List<FondoMonetario>> GetAllAsync()
             => await _context.Fondos.AsNoTracking().ToListAsync();
 
-        public async Task<FondoMonetario?> GetByIdAsync(Guid id)
+        public async Task<FondoMonetario?> GetByIdAsync(int id)
             => await _context.Fondos.FindAsync(id);
 
         public async Task UpdateAsync(FondoMonetario entity)
