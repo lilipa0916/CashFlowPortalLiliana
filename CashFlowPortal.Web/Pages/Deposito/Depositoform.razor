@@ -1,6 +1,69 @@
 ﻿@page "/movimientos/deposito"
-<h3>Depositoform</h3>
+@using FluentValidation
+
+
+@inject IDepositoService DepositoService
+@inject IFondoMonetarioService FondoService
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+
+
+<div class="container mt-4">
+    <h3>Registro de Depósitos</h3>
+
+    <EditForm Model="model" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Fecha</label>
+                <InputDate class="form-control" @bind-Value="model.Fecha" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Fondo Monetario</label>
+                <InputSelect class="form-select" @bind-Value="model.FondoMonetarioId">
+                    <option value="">-- Seleccione --</option>
+                    @foreach (var f in fondos)
+                    {
+                        <option value="@f.Id">@f.Nombre</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Monto</label>
+                <InputNumber class="form-control" @bind-Value="model.Monto" />
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-secondary ms-2" @onclick="Volver">Cancelar</button>
+        </div>
+    </EditForm>
+</div>
 
 @code {
+    private DepositoDto model = new() { Fecha = DateTime.Today };
+    private List<FondoMonetarioDto> fondos = new();
 
+    protected override async Task OnInitializedAsync()
+    {
+        fondos = await FondoService.GetAllAsync();
+    }
+
+    private async Task Guardar()
+    {
+        try
+        {
+            await DepositoService.CreateAsync(model);
+            Nav.NavigateTo("/movimientos/depositos");
+        }
+        catch (ValidationException ex)
+        {
+            await JS.InvokeVoidAsync("alert", ex.Message);
+        }
+    }
+
+    private void Volver() => Nav.NavigateTo("/");
 }

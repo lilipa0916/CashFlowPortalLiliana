@@ -116,6 +116,20 @@ namespace CashFlowPortal.Infraestructura.Data
                  .HasDefaultValueSql("GETUTCDATE()");
             });
 
+            modelBuilder.Entity<Deposito>(b =>
+            {
+                b.HasKey(d => d.Id);
+                b.Property(d => d.Id).UseIdentityColumn();
+                b.Property(d => d.Fecha).IsRequired();
+                b.Property(d => d.Monto)
+                 .HasColumnType("decimal(18,2)")
+                 .IsRequired();
+
+                b.HasOne(d => d.FondoMonetario)
+                 .WithMany()                   
+                 .HasForeignKey(d => d.FondoMonetarioId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
 
             base.OnModelCreating(modelBuilder);
 

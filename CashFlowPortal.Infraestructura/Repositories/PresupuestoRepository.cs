@@ -26,35 +26,45 @@ namespace CashFlowPortal.Infraestructura.Repositories
 
         public async Task AddOrUpdateAsync(Presupuesto entity)
         {
-            var existing = await _context.Presupuestos
-                .Include(p => p.Detalles)
-                .FirstOrDefaultAsync(p =>
-                    p.UsuarioId == entity.UsuarioId &&
-                    p.Mes.Year == entity.Mes.Year &&
-                    p.Mes.Month == entity.Mes.Month);
-
-            if (existing == null)
+            try
             {
-                _context.Presupuestos.Add(entity);
-            }
-            else
-            {
-                // Actualiza campos del encabezado
-                existing.TipoGastoId = entity.TipoGastoId;
-                existing.Monto = entity.Monto;
 
-                // Reemplaza detalles
-                _context.PresupuestoDetalle.RemoveRange(existing.Detalles);
-                foreach (var detalle in entity.Detalles)
+
+                var existing = await _context.Presupuestos
+                    .Include(p => p.Detalles)
+                    .FirstOrDefaultAsync(p =>
+                        p.UsuarioId == entity.UsuarioId &&
+                        p.Mes.Year == entity.Mes.Year &&
+                        p.Mes.Month == entity.Mes.Month);
+
+                if (existing == null)
                 {
-                    detalle.PresupuestoId = existing.Id;
-                    _context.PresupuestoDetalle.Add(detalle);
+                    _context.Presupuestos.Add(entity);
+                }
+                else
+                {
+                    // Actualiza campos del encabezado
+                    existing.TipoGastoId = entity.TipoGastoId;
+                    existing.Monto = entity.Monto;
+
+                    // Reemplaza detalles
+                    _context.PresupuestoDetalle.RemoveRange(existing.Detalles);
+                    foreach (var detalle in entity.Detalles)
+                    {
+                        detalle.PresupuestoId = existing.Id;
+                        _context.PresupuestoDetalle.Add(detalle);
+                    }
+
+                    _context.Presupuestos.Update(existing);
                 }
 
-                _context.Presupuestos.Update(existing);
+                await _context.SaveChangesAsync();
             }
+            catch (Exception ex)
+            {
 
-            await _context.SaveChangesAsync();
+                throw;
+            }
         }
     }
 }

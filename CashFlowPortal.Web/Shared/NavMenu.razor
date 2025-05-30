@@ -1,67 +1,41 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">CashFlowPortal.Web</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+﻿
+<div class="nav-container">
+    <div class="nav-section @(mantenimientoOpen ? "expanded active" : "")"
+         @onclick="@(() => Toggle(ref mantenimientoOpen))"
+         @onmouseover="@(() => Toggle(ref mantenimientoOpen))">
+        Mantenimientos
     </div>
-</div>
+    <ul class="submenu @(mantenimientoOpen ? "expanded" : "")">
+        <li><NavLink href="/tipogastos"> <i class="bi bi-cash-stack me-2"></i> Tipos de Gasto</NavLink></li>
+        <li><NavLink href="/fondos"><i class="bi bi-bank me-2"></i>Fondo Monetario</NavLink></li>
+    </ul>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tipogastos">
-                <span class="oi oi-list-rich" aria-hidden="true"></span>Tipo Gastos
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fondos">
-                <span class="oi oi-list-rich" aria-hidden="true"></span>Fondo Monetario
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/movimientos/presupuesto">
-                <span class="oi oi-list-rich" aria-hidden="true"></span>Presupuesto Por Tipo Gasto
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/movimientos/gastos">
-                <span class="oi oi-list-rich" aria-hidden="true"></span>Registro de gastos
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/movimientos/deposito">
-                <span class="oi oi-list-rich" aria-hidden="true"></span>Deposito
-            </NavLink>
-        </div>
+    <div class="nav-section @(movimientosOpen ? "expanded active" : "")"
+         @onclick="@(() => Toggle(ref movimientosOpen))"
+         @onmouseover="@(() => Toggle(ref movimientosOpen))">
+        Movimientos
+    </div>
+    <ul class="submenu @(movimientosOpen ? "expanded" : "")">
+        <li><NavLink href="/movimientos/presupuesto"><i class="bi bi-calendar2-check me-2"></i>Presupuestos</NavLink></li>
+        <li><NavLink href="/movimientos/gastos"><i class="bi bi-receipt me-2"></i>Registros de Gastos</NavLink></li>
+        <li><NavLink href="/movimientos/deposito"><i class="bi bi-wallet2 me-2"></i>Depósitos</NavLink></li>
+    </ul>
 
-
-        
-    </nav>
+    <div class="nav-section @(consultasOpen ? "expanded active" : "")"
+         @onclick="@(() => Toggle(ref consultasOpen))"
+         @onmouseover="@(() => Toggle(ref consultasOpen))">
+        Consultas y Reportes
+    </div>
+    <ul class="submenu @(consultasOpen ? "expanded" : "")">
+        <li><NavLink href="/consultas"><i class="bi bi-search me-2"></i>Consulta de Movimientos</NavLink></li>
+        <li><NavLink href="/reportes"> <i class="bi bi-bar-chart me-2"></i> Gráfico Comparativo</NavLink></li>
+    </ul>
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool mantenimientoOpen;
+    private bool movimientosOpen;
+    private bool consultasOpen;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    void Toggle(ref bool flag) => flag = !flag;
 }

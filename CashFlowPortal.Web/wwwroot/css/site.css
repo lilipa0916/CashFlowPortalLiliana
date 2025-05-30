@@ -1,4 +1,4 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -66,3 +66,90 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+   
+    /*Se agrega stylos de menu*/
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.nav-link.active {
+    background-color: #0d6efd;
+    color: white !important;
+}
+
+
+/* Colores base */
+:root {
+    --primary-bg: #000000; /* Negro */
+    --primary-text: #ffffff; /* Blanco */
+    --accent: #ffc107; /* Amarillo Bootstrap */
+    --hover-bg: #1a1a1a; /* Gris muy oscuro */
+}
+
+/* Menú lateral */
+.nav-container {
+    width: 250px;
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    height: 100vh;
+    transition: width .3s;
+    overflow: hidden;
+}
+
+    .nav-container:hover {
+        width: 300px;
+    }
+
+/* Secciones principales */
+.nav-section {
+    padding: .75rem 1rem;
+    cursor: pointer;
+    position: relative;
+}
+
+    .nav-section:hover,
+    .nav-section.active {
+        background-color: var(--hover-bg);
+    }
+
+    /* Indicador de collapsed/expanded */
+    .nav-section::after {
+        content: "▶";
+        position: absolute;
+        right: 1rem;
+        transition: transform .3s;
+    }
+
+    .nav-section.expanded::after {
+        transform: rotate(90deg);
+        content: "▼";
+    }
+
+/* Submenú */
+.submenu {
+    list-style: none;
+    padding-left: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s;
+}
+
+    .submenu.expanded {
+        max-height: 500px; /* suficiente para mostrar todos los items */
+    }
+
+    /* Item de submenú */
+    .submenu li {
+        padding: .5rem 2rem;
+    }
+
+        .submenu li a {
+            color: var(--primary-text);
+            text-decoration: none;
+        }
+
+            .submenu li a:hover {
+                color: var(--accent);
+            }

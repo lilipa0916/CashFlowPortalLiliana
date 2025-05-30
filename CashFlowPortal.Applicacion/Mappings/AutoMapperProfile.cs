@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CashFlowPortal.Applicacion.DTOs.Auth;
+using CashFlowPortal.Applicacion.DTOs.Deposito;
 using CashFlowPortal.Applicacion.DTOs.FondoMonetario;
 using CashFlowPortal.Applicacion.DTOs.Gasto;
 using CashFlowPortal.Applicacion.DTOs.Presupuesto;
@@ -22,6 +23,7 @@ namespace CashFlowPortal.Applicacion.Mappings
                 .ReverseMap();
             CreateMap<GastoDto, Gasto>().ReverseMap();
             CreateMap<GastoDetalleDto, GastoDetalle>().ReverseMap();
+            CreateMap<DepositoDto, Deposito>().ReverseMap();
         }
     }
 }

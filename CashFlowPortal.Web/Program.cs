@@ -1,3 +1,4 @@
+using CashFlowPortal.Applicacion.DTOs.Deposito;
 using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.IServices;
 using CashFlowPortal.Applicacion.Interfaces.Repository;
@@ -32,7 +33,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<PresupuestoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<GastoEncabezadoDtoValidator>();
-
+builder.Services.AddScoped<IValidator<DepositoDto>, DepositoDtoValidator>();
 //Servicios
 builder.Services.AddScoped<ITipoGastoService, TipoGastoService>();
 builder.Services.AddScoped<IFondoMonetarioService, FondoMonetarioService>();
@@ -40,6 +41,7 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IPresupuestoService, PresupuestoService>();
 builder.Services.AddScoped<IGastoService, GastoService>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IDepositoService, DepositoService>();
 
 //Repositorios
 builder.Services.AddScoped<ITipoGastoRepository, TipoGastoRepository>();
@@ -47,6 +49,7 @@ builder.Services.AddScoped<IFondoMonetarioRepository, FondoMonetarioRepository>(
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IPresupuestoRepository, PresupuestoRepository>();
 builder.Services.AddScoped<IGastoRepository, GastoRepository>();
+builder.Services.AddScoped<IDepositoRepository, DepositoRepository>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
