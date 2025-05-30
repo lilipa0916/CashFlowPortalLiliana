@@ -47,8 +47,13 @@ namespace CashFlowPortal.Applicacion.Services
 
         public async Task UpdateAsync(TipoGastoFormDto dto)
         {
-            var tipo = _mapper.Map<TipoGasto>(dto);
-            await _repository.UpdateAsync(tipo);
+            var existing = await _repository.GetByIdAsync((Guid)dto.Id);
+            if (existing == null)
+                throw new KeyNotFoundException("TipoGasto no encontrado.");
+
+            // 2. Mappea solo las propiedades (no crees una nueva instancia)
+            _mapper.Map(dto, existing);
+            await _repository.UpdateAsync(existing);
         }
 
         public async Task DeleteAsync(Guid id) => await _repository.DeleteAsync(id);

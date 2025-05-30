@@ -10,7 +10,7 @@ namespace CashFlowPortal.Applicacion.Interfaces.Repository
     public interface ITipoGastoRepository
     {
         Task<TipoGasto> AddAsync(TipoGasto entity);
-        Task<IEnumerable<TipoGasto>> GetAllAsync();
+        Task<List<TipoGasto>> GetAllAsync();
         Task<TipoGasto?> GetByIdAsync(Guid id);
         Task UpdateAsync(TipoGasto entity);
         Task DeleteAsync(Guid id);

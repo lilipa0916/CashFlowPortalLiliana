@@ -19,14 +19,23 @@ namespace CashFlowPortal.Infraestructura.Data
         public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<TipoGasto>()
+            //   .Property(t => t.Codigo)
+            //   .HasComputedColumnSql("'TG' + FORMAT(NEXT VALUE FOR Seq_TipoGasto, 'D3')");
+           
             modelBuilder.Entity<TipoGasto>()
-                .Property(p => p.Codigo)
-                .HasComputedColumnSql("'TG' + RIGHT('0000' + CONVERT(VARCHAR(36), [Id]), 4)",
-                stored: true);
+                .HasKey(t => t.Id);
 
-            //  modelBuilder.Entity<TipoGasto>()
-            //.Property(x => x.Codigo)
-            //.HasComputedColumnSql("FORMAT(Id, 'D5')"); // autogenera código
+            // Si quieres usar SEQUENCE en vez de cálculo en código, descomenta:
+            //
+            // modelBuilder.HasSequence<int>("Seq_TipoGasto")
+            //     .StartsAt(1)
+            //     .IncrementsBy(1);
+            //
+            // modelBuilder.Entity<TipoGasto>()
+            //     .Property(t => t.Codigo)
+            //     .HasComputedColumnSql("'TG' + FORMAT(NEXT VALUE FOR Seq_TipoGasto, 'D3')");
+
 
             modelBuilder.Entity<GastoDetalle>()
                 .HasOne(d => d.Gasto)

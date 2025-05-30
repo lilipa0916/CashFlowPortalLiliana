@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashFlowPortal.Infraestructura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250529225608_InitialCreate")]
+    [Migration("20250530022753_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -193,9 +193,8 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Codigo")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("nvarchar(max)")
-                        .HasComputedColumnSql("'TG' + RIGHT('0000' + CONVERT(VARCHAR(36), [Id]), 4)", true);
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()

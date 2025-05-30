@@ -190,9 +190,8 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Codigo")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("nvarchar(max)")
-                        .HasComputedColumnSql("'TG' + RIGHT('0000' + CONVERT(VARCHAR(36), [Id]), 4)", true);
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()

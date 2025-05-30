@@ -30,7 +30,7 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Codigo = table.Column<string>(type: "nvarchar(max)", nullable: true, computedColumnSql: "'TG' + RIGHT('0000' + CONVERT(VARCHAR(36), [Id]), 4)", stored: true),
+                    Codigo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
