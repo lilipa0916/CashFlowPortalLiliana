@@ -84,9 +84,9 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FondoMonetarioId = table.Column<int>(type: "int", nullable: false),
-                    Observaciones = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Comercio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TipoDocumento = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Observaciones = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Comercio = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    TipoDocumento = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -133,9 +133,8 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GastoId = table.Column<int>(type: "int", nullable: false),
-                    TipoGastoId = table.Column<int>(type: "int", nullable: false),
-                    Monto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TipoGastoId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TipoGastoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Monto = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,8 +146,8 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GastoDetalles_TiposGasto_TipoGastoId1",
-                        column: x => x.TipoGastoId1,
+                        name: "FK_GastoDetalles_TiposGasto_TipoGastoId",
+                        column: x => x.TipoGastoId,
                         principalTable: "TiposGasto",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -196,9 +195,9 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 column: "GastoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GastoDetalles_TipoGastoId1",
+                name: "IX_GastoDetalles_TipoGastoId",
                 table: "GastoDetalles",
-                column: "TipoGastoId1");
+                column: "TipoGastoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Gastos_FondoMonetarioId",

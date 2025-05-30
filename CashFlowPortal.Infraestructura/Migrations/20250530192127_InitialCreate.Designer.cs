@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashFlowPortal.Infraestructura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250530161001_InitialCreate")]
+    [Migration("20250530192127_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -90,7 +90,8 @@ namespace CashFlowPortal.Infraestructura.Migrations
 
                     b.Property<string>("Comercio")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
@@ -100,11 +101,13 @@ namespace CashFlowPortal.Infraestructura.Migrations
 
                     b.Property<string>("Observaciones")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("TipoDocumento")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -127,17 +130,14 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     b.Property<decimal>("Monto")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("TipoGastoId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("TipoGastoId1")
+                    b.Property<Guid>("TipoGastoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GastoId");
 
-                    b.HasIndex("TipoGastoId1");
+                    b.HasIndex("TipoGastoId");
 
                     b.ToTable("GastoDetalles");
                 });
@@ -284,7 +284,7 @@ namespace CashFlowPortal.Infraestructura.Migrations
 
                     b.HasOne("CashFlowPortal.Domain.Entities.TipoGasto", "TipoGasto")
                         .WithMany()
-                        .HasForeignKey("TipoGastoId1")
+                        .HasForeignKey("TipoGastoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

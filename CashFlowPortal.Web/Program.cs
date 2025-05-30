@@ -8,6 +8,7 @@ using CashFlowPortal.Applicacion.Validator;
 using CashFlowPortal.Infraestructura.Data;
 using CashFlowPortal.Infraestructura.Repositories;
 using CashFlowPortal.Web.Data;
+using CashFlowPortal.Web.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,18 +31,22 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<PresupuestoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<GastoEncabezadoDtoValidator>();
 
 //Servicios
 builder.Services.AddScoped<ITipoGastoService, TipoGastoService>();
 builder.Services.AddScoped<IFondoMonetarioService, FondoMonetarioService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IPresupuestoService, PresupuestoService>();
+builder.Services.AddScoped<IGastoService, GastoService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 //Repositorios
 builder.Services.AddScoped<ITipoGastoRepository, TipoGastoRepository>();
 builder.Services.AddScoped<IFondoMonetarioRepository, FondoMonetarioRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IPresupuestoRepository, PresupuestoRepository>();
+builder.Services.AddScoped<IGastoRepository, GastoRepository>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));

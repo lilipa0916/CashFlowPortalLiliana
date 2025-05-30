@@ -4,6 +4,8 @@ namespace CashFlowPortal.Applicacion.DTOs.Gasto
 {
     public class GastoDto
     {
+        public int Id { get; set; }
+
         [Required]
         public DateTime Fecha { get; set; }
 

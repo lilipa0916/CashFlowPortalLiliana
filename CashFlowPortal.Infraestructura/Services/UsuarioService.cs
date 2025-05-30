@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using CashFlowPortal.Applicacion.DTOs.Usuario;
-using CashFlowPortal.Applicacion.Interfaces.IRepository;
+﻿using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.Services;
 using CashFlowPortal.Infraestructura.Auth;
-using CashFlowPortal.Infraestructura.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

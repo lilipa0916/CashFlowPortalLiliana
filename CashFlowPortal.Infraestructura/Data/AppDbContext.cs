@@ -16,17 +16,44 @@ namespace CashFlowPortal.Infraestructura.Data
         public DbSet<PresupuestoDetalle> PresupuestoDetalle => Set<PresupuestoDetalle>();
         public DbSet<Gasto> Gastos => Set<Gasto>();
         public DbSet<GastoDetalle> GastoDetalles => Set<GastoDetalle>();
+
         public DbSet<Deposito> Depositos => Set<Deposito>();
 
         public DbSet<Usuario> Usuarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-         
-           
+
+
             modelBuilder.Entity<TipoGasto>()
                 .HasKey(t => t.Id);
 
-           
+            modelBuilder.Entity<Gasto>(b =>
+            {
+                b.HasKey(e => e.Id);
+                b.Property(e => e.Id)
+                  .UseIdentityColumn();
+                b.Property(e => e.Fecha).IsRequired();
+                b.Property(e => e.Observaciones).HasMaxLength(250);
+                b.Property(e => e.Comercio).HasMaxLength(100).IsRequired();
+                b.Property(e => e.TipoDocumento).HasMaxLength(20).IsRequired();
+
+                b.HasMany(e => e.Detalles)
+                 .WithOne(d => d.Gasto)
+                 .HasForeignKey(d => d.Id)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // GastoDetalle
+            modelBuilder.Entity<GastoDetalle>(b =>
+            {
+                b.HasKey(d => d.Id);
+                b.Property(d => d.Id)
+                  .UseIdentityColumn();
+                b.Property(d => d.Monto)
+                 .HasColumnType("decimal(18,2)")
+                 .IsRequired();
+            });
+
             modelBuilder.Entity<GastoDetalle>()
                 .HasOne(d => d.Gasto)
                 .WithMany(g => g.Detalles)

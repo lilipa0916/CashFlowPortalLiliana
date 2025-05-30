@@ -1,0 +1,127 @@
+﻿@page "/movimientos/gastos"
+@using CashFlowPortal.Applicacion.DTOs.Gasto
+@using CashFlowPortal.Applicacion.DTOs 
+@using FluentValidation
+
+@inject IGastoService GastoService
+@inject IFondoMonetarioService FondoService
+@inject ITipoGastoService TipoService
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+
+
+<div class="container mt-4">
+    <h3>Registro de Gastos</h3>
+
+    <EditForm Model="model" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <label class="form-label">Fecha</label>
+                <InputDate class="form-control" @bind-Value="model.Fecha" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Fondo Monetario</label>
+                <InputSelect class="form-select" @bind-Value="model.FondoMonetarioId">
+                    <option value="">-- Seleccione --</option>
+                    @foreach (var f in fondos)
+                    {
+                        <option value="@f.Id">@f.Nombre</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Observaciones</label>
+                <InputText class="form-control" @bind-Value="model.Observaciones" />
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Nombre Comercio</label>
+                <InputText class="form-control" @bind-Value="model.Comercio" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Tipo Documento</label>
+                <InputSelect class="form-select" @bind-Value="model.TipoDocumento">
+                    <option value="">-- Seleccione --</option>
+                    <option value="Comprobante">Comprobante</option>
+                    <option value="Factura">Factura</option>
+                    <option value="Otro">Otro</option>
+                </InputSelect>
+            </div>
+        </div>
+
+        <hr />
+
+        <h5>Detalles</h5>
+        @foreach (var det in model.Detalles)
+        {
+            <div class="row g-3 align-items-end mb-2">
+                <div class="col-md-5">
+                    <InputSelect class="form-select" @bind-Value="det.TipoGastoId">
+                        <option value="">-- Tipo Gasto --</option>
+                        @foreach (var t in tipos)
+                        {
+                            <option value="@t.Id">@t.Nombre</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="col-md-4">
+                    <InputNumber class="form-control" @bind-Value="det.Monto" placeholder="Monto" />
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-danger" @onclick="() => Quitar(det)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        }
+        <button type="button" class="btn btn-secondary mb-3" @onclick="AgregarDetalle">
+            <i class="bi bi-plus-lg"></i> Agregar Línea
+        </button>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="button" class="btn btn-secondary ms-2" @onclick="Volver">Cancelar</button>
+        </div>
+    </EditForm>
+</div>
+
+
+@code {
+    private GastoDto model = new() { Fecha = DateTime.Today };
+    private List<FondoMonetarioDto> fondos = new();
+    private List<TipoGastoDto> tipos = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        fondos = await FondoService.GetAllAsync();
+        tipos = await TipoService.GetAllAsync();
+        model.Detalles.Add(new GastoDetalleDto());
+    }
+
+    void AgregarDetalle()
+        => model.Detalles.Add(new GastoDetalleDto());
+
+    void Quitar(GastoDetalleDto d)
+        => model.Detalles.Remove(d);
+
+    private async Task Guardar()
+    {
+        try
+        {
+            await GastoService.CreateAsync(model);
+            Nav.NavigateTo("/movimientos/gastos");
+        }
+        catch (ValidationException ex)
+        {
+            await JS.InvokeVoidAsync("alert", ex.Message);
+        }
+    }
+
+    void Volver()
+        => Nav.NavigateTo("/");
+}
