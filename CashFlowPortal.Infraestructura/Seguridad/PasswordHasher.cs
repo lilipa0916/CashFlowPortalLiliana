@@ -1,0 +1,11 @@
+﻿namespace CashFlowPortal.Infraestructura.Seguridad
+{
+    public static class PasswordHasher
+    {
+        public static string HashPassword(string plain)
+            => BCrypt.Net.BCrypt.HashPassword(plain);
+
+        public static bool Verify(string plain, string hashed)
+            => BCrypt.Net.BCrypt.Verify(plain, hashed);
+    }
+}

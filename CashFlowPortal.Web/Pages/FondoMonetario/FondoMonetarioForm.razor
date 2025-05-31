@@ -1,7 +1,7 @@
 ﻿@page "/fondos/crear"
 @page "/fondos/editar/{Id:int}"
 
-
+@attribute [Authorize]
 @inject IFondoMonetarioService Repo
 @inject NavigationManager Nav
 

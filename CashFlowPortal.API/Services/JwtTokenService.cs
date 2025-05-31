@@ -1,4 +1,7 @@
-﻿using CashFlowPortal.API.Settings;
+﻿using AutoMapper;
+using CashFlowPortal.API.Settings;
+using CashFlowPortal.Applicacion.DTOs.Auth;
+using CashFlowPortal.Applicacion.Interfaces.IServices;
 using CashFlowPortal.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -8,17 +11,19 @@ using System.Text;
 
 namespace CashFlowPortal.API.Services
 {
-    public class JwtTokenService
+    public class JwtTokenService: IJwtTokenService
     {
         private readonly JwtSettings _settings;
-
-        public JwtTokenService(IOptions<JwtSettings> options)
+        private readonly IMapper _mapper;
+        public JwtTokenService(IOptions<JwtSettings> options, IMapper mapper)
         {
             _settings = options.Value;
+            _mapper = mapper;
         }
 
-        public string GenerateToken(Usuario usuario)
+        public string GenerateToken(LoginRequestDto useLog )
         {
+            Usuario usuario = _mapper.Map<Usuario>(useLog);
             var claims = new[]
             {
             new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),

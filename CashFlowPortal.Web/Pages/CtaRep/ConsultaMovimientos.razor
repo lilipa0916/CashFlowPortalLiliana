@@ -1,0 +1,66 @@
+﻿@page "/consultas"
+
+@attribute [Authorize]
+@inject IMovimientoService MovimientoService
+
+<h3>Consulta de Movimientos</h3>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <label>Desde:</label>
+        <InputDate @bind-Value="fechaDesde" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label>Hasta:</label>
+        <InputDate @bind-Value="fechaHasta" class="form-control" />
+    </div>
+    <div class="col-md-2 align-self-end">
+        <button class="btn btn-primary" @onclick="Buscar">Buscar</button>
+    </div>
+</div>
+
+@if (movimientos == null)
+{
+    <p>Ingrese un rango de fechas y haga clic en Buscar.</p>
+}
+else if (!movimientos.Any())
+{
+    <div class="alert alert-info">No se encontraron movimientos en ese rango.</div>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Fondo</th>
+                <th>Comercio</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in movimientos)
+            {
+                <tr>
+                    <td>@m.Fecha.ToString("yyyy-MM-dd")</td>
+                    <td>@m.Tipo</td>
+                    <td>@m.Fondo</td>
+                    <td>@m.Comercio</td>
+                    <td>@m.Monto.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private DateTime fechaDesde = DateTime.Today.AddMonths(-1);
+    private DateTime fechaHasta = DateTime.Today;
+    private IEnumerable<MovimientoDto>? movimientos;
+
+    private async Task Buscar()
+    {
+        movimientos = await MovimientoService.GetMovimientosAsync(fechaDesde, fechaHasta);
+    }
+}

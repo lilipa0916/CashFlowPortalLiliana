@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CashFlowPortal.Applicacion.DTOs.Auth;
 
 namespace CashFlowPortal.Applicacion.Interfaces.IServices
 {
     public interface IJwtTokenService
     {
+        string GenerateToken(LoginRequestDto user);
     }
 }

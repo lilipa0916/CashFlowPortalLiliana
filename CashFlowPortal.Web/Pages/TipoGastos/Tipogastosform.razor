@@ -1,4 +1,5 @@
 ﻿@page "/tipogastos/form/{Id:guid?}"
+@attribute [Authorize]
 
 @inject ITipoGastoService TipoGastoService
 @inject NavigationManager NavManager

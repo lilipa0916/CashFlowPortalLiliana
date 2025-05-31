@@ -1,6 +1,5 @@
-﻿using CashFlowPortal.Applicacion.DTOs;
-using CashFlowPortal.Applicacion.DTOs.Auth;
-using CashFlowPortal.Infraestructura.Auth;
+﻿using CashFlowPortal.Applicacion.DTOs.Auth;
+using CashFlowPortal.Applicacion.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CashFlowPortal.API.Controllers
@@ -21,7 +20,7 @@ namespace CashFlowPortal.API.Controllers
         {
             if (dto.Usuario == "admin" && dto.Clave == "admin")
             {
-                var token = _jwtService.GenerateToken("1", "admin");
+                var token = _jwtService.GenerateToken(dto);
                 return Ok(new { Token = token });
             }
 
