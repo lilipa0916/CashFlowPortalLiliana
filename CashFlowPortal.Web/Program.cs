@@ -9,10 +9,13 @@ using CashFlowPortal.Applicacion.Validator;
 using CashFlowPortal.Infraestructura.Data;
 using CashFlowPortal.Infraestructura.Repositories;
 using CashFlowPortal.Web.Data;
+using CashFlowPortal.Web.Providers;
 using CashFlowPortal.Web.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -33,6 +36,9 @@ builder.Services.AddHttpClient("Api", client =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ProtectedSessionStorage>();
+builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
 //Validaciones
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();

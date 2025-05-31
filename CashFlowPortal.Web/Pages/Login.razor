@@ -4,7 +4,7 @@
 @inject IAuthService AuthService
 @inject NavigationManager Nav
 @inject ProtectedSessionStorage sessionStorage
-
+@inject Providers.JwtAuthenticationStateProvider AuthStateProvider
 <div class="login-container">
     <div class="login-card">
         <h3>Iniciar Sesión</h3>
@@ -45,8 +45,9 @@
         try
         {
             var response = await AuthService.LoginAsync(loginModel);
-            await sessionStorage.SetAsync("authToken", response.Token);
-            await sessionStorage.SetAsync("tokenExpiration", response.ExpiraEn);
+            await AuthStateProvider.MarkUserAsAuthenticated(response.Token);
+            // await sessionStorage.SetAsync("authToken", response.Token);
+            // await sessionStorage.SetAsync("tokenExpiration", response.ExpiraEn);
             Nav.NavigateTo("/");
         }
         catch (Exception ex)
