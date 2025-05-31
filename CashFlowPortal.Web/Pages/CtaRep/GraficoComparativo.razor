@@ -1,0 +1,42 @@
+﻿@page "/reportes"
+@attribute [Authorize]
+
+@using CashFlowPortal.Applicacion.DTOs.Reporte
+@inject IReporteService ReporteService
+@inject IJSRuntime JSRuntime
+
+<h3>Gráfico Comparativo Presupuesto vs Ejecución</h3>
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <label>Desde:</label>
+        <InputDate @bind-Value="fechaDesde" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label>Hasta:</label>
+        <InputDate @bind-Value="fechaHasta" class="form-control" />
+    </div>
+    <div class="col-md-2 align-self-end">
+        <button class="btn btn-primary" @onclick="CargarDatos">Cargar Gráfico</button>
+    </div>
+</div>
+
+<canvas id="chart" width="800" height="400"></canvas>
+
+@code {
+    private DateTime fechaDesde = DateTime.Today.AddMonths(-1);
+    private DateTime fechaHasta = DateTime.Today;
+    private List<string> etiquetas = new();
+    private List<decimal> datosPresupuesto = new();
+    private List<decimal> datosEjecutado = new();
+
+    private async Task CargarDatos()
+    {
+        var lista = (await ReporteService.GetComparativoAsync(fechaDesde, fechaHasta)).ToList();
+        etiquetas = lista.Select(x => x.TipoGasto).ToList();
+        datosPresupuesto = lista.Select(x => x.Presupuestado).ToList();
+        datosEjecutado = lista.Select(x => x.Ejecutado).ToList();
+
+        await JSRuntime.InvokeVoidAsync("renderChart", etiquetas, datosPresupuesto, datosEjecutado);
+    }
+}

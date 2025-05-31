@@ -50,7 +50,8 @@
         {
             var response = await AuthService.LoginAsync(loginModel);
             await AuthStateProvider.MarkUserAsAuthenticated(response.Token);
-            Nav.NavigateTo("/");
+            //Nav.NavigateTo("/");
+            Nav.NavigateTo("/", forceLoad: true);
         }
         catch (Exception ex)
         {
