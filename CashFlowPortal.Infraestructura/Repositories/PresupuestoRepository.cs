@@ -13,7 +13,6 @@ namespace CashFlowPortal.Infraestructura.Repositories
         public async Task<Presupuesto?> GetByIdAsync(Guid id)
             => await _context.Presupuestos
                              .Include(p => p.TipoGasto)
-                             .Include(p => p.Detalles)
                              .FirstOrDefaultAsync(p => p.Id == id);
 
         public async Task<List<Presupuesto>> GetByMesAsync(Guid usuarioId, DateTime mes)
@@ -31,7 +30,6 @@ namespace CashFlowPortal.Infraestructura.Repositories
 
 
                 var existing = await _context.Presupuestos
-                    .Include(p => p.Detalles)
                     .FirstOrDefaultAsync(p =>
                         p.UsuarioId == entity.UsuarioId &&
                         p.Mes.Year == entity.Mes.Year &&
@@ -48,12 +46,7 @@ namespace CashFlowPortal.Infraestructura.Repositories
                     existing.Monto = entity.Monto;
 
                     // Reemplaza detalles
-                    _context.PresupuestoDetalle.RemoveRange(existing.Detalles);
-                    foreach (var detalle in entity.Detalles)
-                    {
-                        detalle.PresupuestoId = existing.Id;
-                        _context.PresupuestoDetalle.Add(detalle);
-                    }
+                 
 
                     _context.Presupuestos.Update(existing);
                 }

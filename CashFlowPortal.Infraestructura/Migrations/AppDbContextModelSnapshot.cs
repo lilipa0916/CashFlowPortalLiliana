@@ -173,31 +173,6 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     b.ToTable("Presupuestos");
                 });
 
-            modelBuilder.Entity("CashFlowPortal.Domain.Entities.PresupuestoDetalle", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<decimal>("MontoPresupuestado")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("PresupuestoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TipoGastoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PresupuestoId");
-
-                    b.HasIndex("TipoGastoId");
-
-                    b.ToTable("PresupuestoDetalle");
-                });
-
             modelBuilder.Entity("CashFlowPortal.Domain.Entities.TipoGasto", b =>
                 {
                     b.Property<Guid>("Id")
@@ -247,7 +222,7 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         new
                         {
                             Id = new Guid("d5a620c0-3c2b-4b36-87d5-8e4e8e3e44f4"),
-                            ClaveHash = "$2a$11$dkCwSRu5VoQ7MyzVNTAbv.1BUL6DyhVRDkZJIbGBsRz5apcFTLQ5y",
+                            ClaveHash = "$2a$11$4W22RZrRxx1y8p..tWU20O5Mj6hM397CuMW3Q5HEJkvzzRHy/L8hW",
                             Nombre = "Administrador",
                             Rol = "Admin",
                             UsuarioLogin = "admin"
@@ -322,31 +297,7 @@ namespace CashFlowPortal.Infraestructura.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("CashFlowPortal.Domain.Entities.PresupuestoDetalle", b =>
-                {
-                    b.HasOne("CashFlowPortal.Domain.Entities.Presupuesto", "Presupuesto")
-                        .WithMany("Detalles")
-                        .HasForeignKey("PresupuestoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CashFlowPortal.Domain.Entities.TipoGasto", "TipoGasto")
-                        .WithMany()
-                        .HasForeignKey("TipoGastoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Presupuesto");
-
-                    b.Navigation("TipoGasto");
-                });
-
             modelBuilder.Entity("CashFlowPortal.Domain.Entities.Gasto", b =>
-                {
-                    b.Navigation("Detalles");
-                });
-
-            modelBuilder.Entity("CashFlowPortal.Domain.Entities.Presupuesto", b =>
                 {
                     b.Navigation("Detalles");
                 });

@@ -21,7 +21,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -35,9 +34,18 @@ builder.Services.AddHttpClient("Api", client =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    sqlOptions =>
+    {
+        //sqlOptions.EnableRetryOnFailure(
+        //        maxRetryCount: 5,
+        //        maxRetryDelay: TimeSpan.FromSeconds(10),
+        //        errorNumbersToAdd: null);
+        sqlOptions.EnableRetryOnFailure();
+    }));
 
 builder.Services.AddScoped<ProtectedSessionStorage>();
+builder.Services.AddScoped<JwtAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
 //Validaciones
 builder.Services.AddFluentValidationAutoValidation();

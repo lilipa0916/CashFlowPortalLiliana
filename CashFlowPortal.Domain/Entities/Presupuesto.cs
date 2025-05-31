@@ -13,7 +13,6 @@
         public decimal Monto { get; set; }
         
         public Usuario Usuario { get; set; }
-        public List<PresupuestoDetalle> Detalles { get; set; } = new();
         public TipoGasto TipoGasto { get; set; } = null!;
     }
 }

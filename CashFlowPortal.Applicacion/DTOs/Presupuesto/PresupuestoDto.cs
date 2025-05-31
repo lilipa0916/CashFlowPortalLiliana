@@ -14,6 +14,5 @@ namespace CashFlowPortal.Applicacion.DTOs.Presupuesto
         public Guid TipoGastoId { get; set; }
         public DateTime Mes { get; set; }
         public decimal Monto { get; set; }
-        public List<PresupuestoDetalleDto> Detalles { get; set; } = new();
     }
 }

@@ -30,8 +30,8 @@
                 <ValidationMessage For="@(() => loginModel.Clave)"
                                    class="validation-message" />
             </div>
-
-            <button type="submit" class="btn-login">Ingresar</button>
+            <br />
+            <button type="submit" class="btn-login" disabled="@isLoading">  @(isLoading ? "Ingresando..." : "Ingresar")</button>
         </EditForm>
     </div>
 </div>
@@ -39,20 +39,26 @@
 @code {
     private LoginRequestDto loginModel = new();
     private string? error;
-
+    private bool isLoading = false;
     private async Task HandleLogin()
     {
+        if (isLoading) return;
+        isLoading = true;
+        error = null;
+
         try
         {
             var response = await AuthService.LoginAsync(loginModel);
             await AuthStateProvider.MarkUserAsAuthenticated(response.Token);
-            // await sessionStorage.SetAsync("authToken", response.Token);
-            // await sessionStorage.SetAsync("tokenExpiration", response.ExpiraEn);
             Nav.NavigateTo("/");
         }
         catch (Exception ex)
         {
             error = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
         }
     }
 }

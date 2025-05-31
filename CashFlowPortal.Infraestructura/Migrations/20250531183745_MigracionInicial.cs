@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CashFlowPortal.Infraestructura.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class MigracionInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -160,36 +160,10 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "PresupuestoDetalle",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
-                    PresupuestoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TipoGastoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MontoPresupuestado = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PresupuestoDetalle", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PresupuestoDetalle_Presupuestos_PresupuestoId",
-                        column: x => x.PresupuestoId,
-                        principalTable: "Presupuestos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PresupuestoDetalle_TiposGasto_TipoGastoId",
-                        column: x => x.TipoGastoId,
-                        principalTable: "TiposGasto",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.InsertData(
                 table: "Usuarios",
                 columns: new[] { "Id", "ClaveHash", "Nombre", "Rol", "UsuarioLogin" },
-                values: new object[] { new Guid("d5a620c0-3c2b-4b36-87d5-8e4e8e3e44f4"), "$2a$11$dkCwSRu5VoQ7MyzVNTAbv.1BUL6DyhVRDkZJIbGBsRz5apcFTLQ5y", "Administrador", "Admin", "admin" });
+                values: new object[] { new Guid("d5a620c0-3c2b-4b36-87d5-8e4e8e3e44f4"), "$2a$11$4W22RZrRxx1y8p..tWU20O5Mj6hM397CuMW3Q5HEJkvzzRHy/L8hW", "Administrador", "Admin", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Depositos_FondoMonetarioId",
@@ -217,16 +191,6 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PresupuestoDetalle_PresupuestoId",
-                table: "PresupuestoDetalle",
-                column: "PresupuestoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PresupuestoDetalle_TipoGastoId",
-                table: "PresupuestoDetalle",
-                column: "TipoGastoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Presupuestos_TipoGastoId",
                 table: "Presupuestos",
                 column: "TipoGastoId");
@@ -248,19 +212,16 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 name: "GastoDetalles");
 
             migrationBuilder.DropTable(
-                name: "PresupuestoDetalle");
+                name: "Presupuestos");
 
             migrationBuilder.DropTable(
                 name: "Gastos");
 
             migrationBuilder.DropTable(
-                name: "Presupuestos");
+                name: "TiposGasto");
 
             migrationBuilder.DropTable(
                 name: "Fondos");
-
-            migrationBuilder.DropTable(
-                name: "TiposGasto");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");

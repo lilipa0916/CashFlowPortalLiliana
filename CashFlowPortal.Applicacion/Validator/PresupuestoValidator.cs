@@ -11,7 +11,6 @@ namespace CashFlowPortal.Applicacion.Validator
             RuleFor(x => x.TipoGastoId).NotEmpty();
             RuleFor(x => x.Mes).NotEmpty();
             RuleFor(x => x.Monto).GreaterThanOrEqualTo(0);
-            RuleForEach(x => x.Detalles).SetValidator(new PresupuestoDetalleDtoValidator());
         }
     }
 }

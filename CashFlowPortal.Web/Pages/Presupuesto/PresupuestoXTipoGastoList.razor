@@ -6,7 +6,9 @@
 @using CashFlowPortal.Applicacion.Interfaces
 @using CashFlowPortal.Applicacion.DTOs.Presupuesto
 @using CashFlowPortal.Applicacion.DTOs.TipoGasto
+@using System.Security.Claims
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IPresupuestoService PresupuestoService
 @inject ITipoGastoService TipoGastoService
 @inject NavigationManager Nav
@@ -64,21 +66,31 @@
 
 @code {
     // Usuario fijo de ejemplo; reemplaza por tu lógica de usuario actual
-    private readonly Guid usuarioId = new Guid("00000000-0000-0000-0000-000000000001");
+    //private readonly Guid usuarioId = new Guid("00000000-0000-0000-0000-000000000001");
 
     private DateTime mes = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
     private List<PresupuestoDto>? presupuestoList;
     private List<TipoGastoDto> tipos = new();
+    private Guid UsuarioId;
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var idStr = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         tipos = await TipoGastoService.GetAllAsync();
+
+        if (!Guid.TryParse(idStr, out UsuarioId))
+        {
+            // Aquí podrías mostrar un error o redirigir a login
+            throw new InvalidOperationException("Usuario no autenticado correctamente.");
+        }
     }
 
     private async Task Cargar()
     {
         // Trae los existentes
-        var existentes = await PresupuestoService.GetByMesAsync(usuarioId, mes);
+        var existentes = await PresupuestoService.GetByMesAsync(UsuarioId, mes);
 
         if (existentes == null || !existentes.Any())
         {
@@ -87,7 +99,7 @@
                 .Select(t => new PresupuestoDto
                 {
                     Id = Guid.Empty,
-                    UsuarioId = usuarioId,
+                    UsuarioId = UsuarioId,
                     TipoGastoId = t.Id,
                     Mes = mes,
                     Monto = 0m

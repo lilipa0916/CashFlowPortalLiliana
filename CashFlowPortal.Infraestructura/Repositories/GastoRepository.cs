@@ -12,19 +12,28 @@ namespace CashFlowPortal.Infraestructura.Repositories
 
         public async Task<int> AddWithDetalleAsync(Gasto entity)
         {
-            using var tx = await _context.Database.BeginTransactionAsync();
-            _context.Gastos.Add(entity);
-            await _context.SaveChangesAsync();
-
-            // Los detalles vienen en entity.Detalles
-            foreach (var d in entity.Detalles)
+            try
             {
-                d.Id = entity.Id;
-                _context.GastoDetalles.Add(d);
-            }
-            await _context.SaveChangesAsync();
 
-            await tx.CommitAsync();
+                _context.Gastos.Add(entity);
+                await _context.SaveChangesAsync();
+
+                //// Asegúrate de que cada detalle tenga el GastoId correcto
+                //foreach (var d in entity.Detalles)
+                //{
+                //    d.GastoId = entity.Id;
+                //    _context.GastoDetalles.Add(d);
+                //}
+
+                //await _context.SaveChangesAsync();
+
+                return entity.Id;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
             return entity.Id;
         }
 
