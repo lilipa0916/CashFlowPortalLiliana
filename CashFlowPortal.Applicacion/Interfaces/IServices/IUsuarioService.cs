@@ -1,6 +1,4 @@
-﻿using CashFlowPortal.Applicacion.DTOs;
-using CashFlowPortal.Applicacion.DTOs.Auth;
-using CashFlowPortal.Applicacion.DTOs.Usuario;
+﻿using CashFlowPortal.Applicacion.DTOs.Auth;
 
 namespace CashFlowPortal.Applicacion.Interfaces.Services
 {

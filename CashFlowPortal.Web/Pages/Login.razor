@@ -1,34 +1,40 @@
 ﻿@page "/login"
-@using CashFlowPortal.Applicacion.DTOs.Auth
-@using CashFlowPortal.Applicacion.Services
-@using System.Threading.Tasks
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 @inject IAuthService AuthService
 @inject NavigationManager Nav
-
 @inject ProtectedSessionStorage sessionStorage
 
-<h3>Login</h3>
+<div class="login-container">
+    <div class="login-card">
+        <h3>Iniciar Sesión</h3>
 
-@if (!string.IsNullOrEmpty(error))
-{
-    <div class="alert alert-danger">@error</div>
-}
-<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="form-group">
-        <label>Usuario:</label>
-        <InputText @bind-Value="loginModel.Usuario" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label>Contraseña:</label>
-        <InputText @bind-Value="loginModel.Clave" type="password" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Ingresar</button>
-</EditForm>
+        @if (!string.IsNullOrEmpty(error))
+        {
+            <div class="alert alert-danger">@error</div>
+        }
 
+        <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label>Usuario:</label>
+                <InputText @bind-Value="loginModel.Usuario" class="form-control" />
+                <ValidationMessage For="@(() => loginModel.Usuario)"
+                                   class="validation-message" />
+            </div>
+
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <InputText @bind-Value="loginModel.Clave" type="password" class="form-control" />
+                <ValidationMessage For="@(() => loginModel.Clave)"
+                                   class="validation-message" />
+            </div>
+
+            <button type="submit" class="btn-login">Ingresar</button>
+        </EditForm>
+    </div>
+</div>
 
 @code {
     private LoginRequestDto loginModel = new();
@@ -39,15 +45,8 @@
         try
         {
             var response = await AuthService.LoginAsync(loginModel);
-
-            // Guardar el token en localStorage (o en ProtectedSessionStorage)
-            // En Blazor Server no hay localStorage en el servidor:
-            // si quieres persistir en sesión, usa ProtectedSessionStorage o ProtectedLocalStorage.
-            // A modo de ejemplo, usamos ProtectedSessionStorage:
-
             await sessionStorage.SetAsync("authToken", response.Token);
             await sessionStorage.SetAsync("tokenExpiration", response.ExpiraEn);
-
             Nav.NavigateTo("/");
         }
         catch (Exception ex)

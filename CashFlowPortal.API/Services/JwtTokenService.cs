@@ -2,44 +2,43 @@
 using CashFlowPortal.API.Settings;
 using CashFlowPortal.Applicacion.DTOs.Auth;
 using CashFlowPortal.Applicacion.Interfaces.IServices;
+using CashFlowPortal.Applicacion.Services;
 using CashFlowPortal.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+using JwtSettings = CashFlowPortal.Applicacion.Services.JwtSettings;
 namespace CashFlowPortal.API.Services
 {
     public class JwtTokenService: IJwtTokenService
     {
-        private readonly JwtSettings _settings;
-        private readonly IMapper _mapper;
+        private readonly JwtSettings _jwtSettings;
         public JwtTokenService(IOptions<JwtSettings> options, IMapper mapper)
         {
-            _settings = options.Value;
-            _mapper = mapper;
+            _jwtSettings = options.Value;
         }
 
-        public string GenerateToken(LoginRequestDto useLog )
+        public string GenerateToken(Usuario user)
         {
-            Usuario usuario = _mapper.Map<Usuario>(useLog);
             var claims = new[]
             {
-            new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
-            new Claim(ClaimTypes.Name, usuario.Nombre),
-          //  new Claim(ClaimTypes.Email, usuario.Correo)
-        };
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UsuarioLogin),
+                new Claim(ClaimTypes.Role, user.Rol)
+            };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                _settings.Issuer,
-                _settings.Audience,
-                claims,
-                expires: DateTime.UtcNow.AddMinutes(_settings.ExpirationMinutes),
-                signingCredentials: creds);
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
+                signingCredentials: creds
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

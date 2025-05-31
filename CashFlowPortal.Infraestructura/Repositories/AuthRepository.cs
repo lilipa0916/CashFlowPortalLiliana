@@ -6,44 +6,30 @@ using CashFlowPortal.Domain.Entities;
 using CashFlowPortal.Infraestructura.Data;
 using CashFlowPortal.Infraestructura.Seguridad;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CashFlowPortal.Infraestructura.Repositories
 {
-    public class AuthRepository: IAuthRepository
+    public class AuthRepository : IAuthRepository
     {
-        private readonly AppDbContext _context; // o bien IApplicationDbContext
-        private readonly IJwtTokenService _jwtTokenService;
-        private readonly IMapper _mapper;
+        private readonly AppDbContext _context;
 
-        public AuthRepository(AppDbContext context, IJwtTokenService jwtTokenService, IMapper mapper)
+        public AuthRepository(AppDbContext context)
         {
             _context = context;
-            _jwtTokenService = jwtTokenService;
-            _mapper = mapper;
         }
 
-
-
-        public async Task<LoginResponseDto> LoginAsync(Usuario request)
+        public async Task<Usuario?> LoginAsync(LoginRequestDto request)
         {
             var usuario = await _context.Usuarios
-                    .SingleOrDefaultAsync(u => u.UsuarioLogin == request.UsuarioLogin);
+                .SingleOrDefaultAsync(u => u.UsuarioLogin == request.Usuario);
 
-            if (usuario == null || !PasswordHasher.Verify(request.ClaveHash, usuario.ClaveHash))
-                throw new Exception("Usuario o contraseña inválidos.");
-            LoginRequestDto user = _mapper.Map<LoginRequestDto>(request);
-            var token = _jwtTokenService.GenerateToken(user);
+            if (usuario == null)
+                return null;
 
-            return new LoginResponseDto
-            {
-                Token = token,
-                ExpiraEn = DateTime.UtcNow.AddMinutes(60)
-            };
+            if (!PasswordHasher.Verify(request.Clave, usuario.ClaveHash))
+                return null;
+
+            return usuario;
         }
     }
 }

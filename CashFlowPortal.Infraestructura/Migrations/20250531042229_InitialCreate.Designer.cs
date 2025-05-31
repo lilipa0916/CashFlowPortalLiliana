@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CashFlowPortal.Infraestructura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250530192127_InitialCreate")]
+    [Migration("20250531042229_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -109,9 +109,14 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<Guid>("UsuarioId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FondoMonetarioId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Gastos");
                 });
@@ -271,7 +276,15 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CashFlowPortal.Domain.Entities.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("FondoMonetario");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("CashFlowPortal.Domain.Entities.GastoDetalle", b =>

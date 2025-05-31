@@ -1,7 +1,4 @@
-﻿using CashFlowPortal.Applicacion.DTOs;
-using CashFlowPortal.Applicacion.DTOs.Auth;
-using CashFlowPortal.Applicacion.DTOs.Usuario;
-using CashFlowPortal.Applicacion.Interfaces;
+﻿using CashFlowPortal.Applicacion.DTOs.Auth;
 using CashFlowPortal.Applicacion.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 

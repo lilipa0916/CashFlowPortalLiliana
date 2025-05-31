@@ -153,3 +153,101 @@ body {
             .submenu li a:hover {
                 color: var(--accent);
             }
+
+
+
+
+/*.nav-container {
+    width: 240px;
+    background-color: #2c3e50;*/ /* Fondo oscuro */
+    /*color: #ecf0f1;*/ /* Texto claro */
+    /*padding-top: 1rem;
+    padding-bottom: 1rem;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    transition: width 0.3s ease;
+}*/
+
+/* Cada sección principal del menú */
+/*.nav-section {
+    padding: 0.75rem 1rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background-color 0.2s ease;
+}*/
+
+    /* Hover o sección activa */
+    /*.nav-section:hover,
+    .nav-section.active {
+        background-color: #34495e;
+        color: #ecf0f1;
+    }*/
+
+/* Icono de chevron o flecha para indicar expandido (opcional) */
+/* Si quieres agregar un ::after con una flecha, por ejemplo:
+.nav-section::after {
+  content: "▸";
+  position: absolute;
+  right: 1rem;
+  transition: transform 0.3s ease;
+}
+.nav-section.expanded::after {
+  transform: rotate(90deg);
+}
+*/
+
+/* Submenús ocultos/colapsados inicialmente */
+/*.submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.5rem;*/ /* sangría para el submenú */
+    /*max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}*/
+
+    /* Cuando la clase .expanded está presente, se expande el menú */
+    /*.submenu.expanded {
+        max-height: 500px;*/ /* suficientemente grande para mostrar todos los ítems */
+    /*}*/
+
+    /* Ítems dentro del submenú */
+    /*.submenu li {
+        margin: 0.25rem 0;
+    }*/
+
+        /* Enlaces del submenú */
+        /*.submenu li a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #bdc3c7;
+            font-size: 0.95rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+            .submenu li a:hover {
+                background-color: #3d566e;
+                color: #ecf0f1;
+            }*/
+
+            /* Iconos dentro del NavLink */
+            /*.submenu li a i {
+                font-size: 1.1rem;
+                margin-right: 0.5rem;
+            }*/
+
+            /* Si quieres resaltar el NavLink activo (Bootstrap agrega .active automáticamente) */
+            /*.submenu li a.active {
+                background-color: #1abc9c;
+                color: #fff;
+            }*/

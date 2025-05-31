@@ -12,5 +12,7 @@ namespace CashFlowPortal.Applicacion.Interfaces.IServices
     {
      
         Task<LoginResponseDto> LoginAsync(LoginRequestDto request);
+
+
     }
 }

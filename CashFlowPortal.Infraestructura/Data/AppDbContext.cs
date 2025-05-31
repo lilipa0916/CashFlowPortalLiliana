@@ -140,8 +140,8 @@ namespace CashFlowPortal.Infraestructura.Data
                 Id = adminId,
                 Nombre = "Administrador",
                 UsuarioLogin = "admin",
-                //ClaveHash = "$2a$11$dkCwSRu5VoQ7MyzVNTAbv.1BUL6DyhVRDkZJIbGBsRz5apcFTLQ5y", // 🔐 hash fijo
-                ClaveHash = PasswordHasher.HashPassword("admin"), // 🔐 hash fijo
+                ClaveHash = "$2a$11$4W22RZrRxx1y8p..tWU20O5Mj6hM397CuMW3Q5HEJkvzzRHy/L8hW", // 🔐 hash fijo
+                //ClaveHash = PasswordHasher.HashPassword("admin"), // 🔐 hash fijo
                 Rol = "Admin"
             });
         }

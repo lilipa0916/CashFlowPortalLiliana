@@ -2,7 +2,7 @@
 {
     public class Usuario
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         public string Nombre { get; set; } = null!;
         public string UsuarioLogin { get; set; } = null!;
         public string ClaveHash { get; set; } = null!;

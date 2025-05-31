@@ -82,6 +82,7 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FondoMonetarioId = table.Column<int>(type: "int", nullable: false),
                     Observaciones = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
@@ -95,6 +96,12 @@ namespace CashFlowPortal.Infraestructura.Migrations
                         name: "FK_Gastos_Fondos_FondoMonetarioId",
                         column: x => x.FondoMonetarioId,
                         principalTable: "Fondos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Gastos_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -203,6 +210,11 @@ namespace CashFlowPortal.Infraestructura.Migrations
                 name: "IX_Gastos_FondoMonetarioId",
                 table: "Gastos",
                 column: "FondoMonetarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Gastos_UsuarioId",
+                table: "Gastos",
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PresupuestoDetalle_PresupuestoId",

@@ -1,7 +1,6 @@
 ﻿using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.Services;
 using CashFlowPortal.Applicacion.Services;
-using CashFlowPortal.Infraestructura.Auth;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
