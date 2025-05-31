@@ -34,7 +34,7 @@ namespace CashFlowPortal.Applicacion.Services
             _validator = validator;
         }
 
-        public async Task<int> CreateAsync(GastoDto dto)
+        public async Task<int> CreateAsync(GastoDto dto, Guid UsuarioId)
         {
             // 1) Valida DTO
             await _validator.ValidateAndThrowAsync(dto);
@@ -43,14 +43,13 @@ namespace CashFlowPortal.Applicacion.Services
             var entidad = _mapper.Map<Gasto>(dto);
 
             // 3) Obtiene el usuario y el mes
-            var usuarioId = await _currentUser.GetUserIdAsync();
             var mes = new DateTime(dto.Fecha.Year, dto.Fecha.Month, 1);
-
+            entidad.UsuarioId = UsuarioId;
             // 4) Chequeo de sobregiro
             var errores = new List<string>();
             foreach (var det in dto.Detalles)
             {
-                var presus = await _presRepo.GetByMesAsync(usuarioId, mes);
+                var presus = await _presRepo.GetByMesAsync(UsuarioId, mes);
                 var pres = presus.FirstOrDefault(p => p.TipoGastoId == det.TipoGastoId);
                 var gastado = await _repo.SumByTipoAndMesAsync(det.TipoGastoId, mes);
 

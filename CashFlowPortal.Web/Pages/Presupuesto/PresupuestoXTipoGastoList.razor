@@ -7,6 +7,7 @@
 @using CashFlowPortal.Applicacion.DTOs.Presupuesto
 @using CashFlowPortal.Applicacion.DTOs.TipoGasto
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Http
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IPresupuestoService PresupuestoService
@@ -114,10 +115,12 @@
 
     private async Task Guardar()
     {
-        if (presupuestoList == null) return;
 
+        if (presupuestoList == null) return;
+        
         foreach (var dto in presupuestoList)
         {
+            dto.UsuarioId = UsuarioId;
             await PresupuestoService.AddOrUpdateAsync(dto);
         }
         Nav.NavigateTo("/");

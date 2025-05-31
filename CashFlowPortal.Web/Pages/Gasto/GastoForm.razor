@@ -4,12 +4,15 @@
 @using CashFlowPortal.Applicacion.DTOs.Gasto
 @using CashFlowPortal.Applicacion.DTOs 
 @using FluentValidation
+@using System.Security.Claims
 
 @inject IGastoService GastoService
 @inject IFondoMonetarioService FondoService
 @inject ITipoGastoService TipoService
 @inject NavigationManager Nav
 @inject IJSRuntime JS
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 
 
 <div class="container mt-4">
@@ -97,9 +100,20 @@
     private GastoDto model = new() { Fecha = DateTime.Today };
     private List<FondoMonetarioDto> fondos = new();
     private List<TipoGastoDto> tipos = new();
+    private Guid UsuarioId;
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var idStr = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!Guid.TryParse(idStr, out UsuarioId))
+        {
+            // Aquí podrías mostrar un error o redirigir a login
+            throw new InvalidOperationException("Usuario no autenticado correctamente.");
+        }
+
         fondos = await FondoService.GetAllAsync();
         tipos = await TipoService.GetAllAsync();
         model.Detalles.Add(new GastoDetalleDto());
@@ -115,7 +129,8 @@
     {
         try
         {
-            await GastoService.CreateAsync(model);
+            
+            await GastoService.CreateAsync(model, UsuarioId);
             Nav.NavigateTo("/movimientos/gastos");
         }
         catch (ValidationException ex)

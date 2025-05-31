@@ -65,6 +65,7 @@
         {
             await JS.InvokeVoidAsync("alert", ex.Message);
         }
+        Nav.NavigateTo("/");
     }
 
     private void Volver() => Nav.NavigateTo("/");
