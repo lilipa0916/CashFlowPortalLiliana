@@ -5,8 +5,29 @@
 @inject IReporteService ReporteService
 @inject IJSRuntime JSRuntime
 
+
+@* <style>
+    .chart-container {
+        width: 100%;
+        height: 70vh;
+        max-height: 600px; 
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+    }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    /* Título con margen superior */
+    h3.mb-4 {
+        margin-top: 1.5rem;
+    }
+</style> *@
+
 <style>
-    /* Ajusta el contenedor para que el gráfico ocupe todo el ancho disponible */
     .chart-container {
         width: 100%;
         max-width: 800px;
@@ -15,59 +36,45 @@
         background-color: #ffffff;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        height: 80%; /* Espacio vertical fijo para que el canvas se adapte */
     }
 
-        /* El canvas ocupa el 100% del ancho del contenedor */
         .chart-container canvas {
             width: 100% !important;
-            height: auto !important;
-        }
-
-    /* Estilos para el formulario de fechas y selector */
-    .form-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        align-items: flex-end;
-        margin-bottom: 1rem;
-    }
-
-        .form-row .col {
-            flex: 1 1 200px;
-        }
-
-        .form-row label {
-            font-weight: 600;
+            height: 100% !important;
         }
 </style>
 
-<h3 class="mb-3">Gráfico Comparativo Presupuesto vs Ejecución</h3>
+<h3 class="mb-4">Gráfico Comparativo Presupuesto vs Ejecución</h3>
 
-<div class="form-row">
-    <div class="col">
-        <label for="inputDesde">Desde:</label>
+<!-- FILTROS: Desde, Hasta, Tipo de gráfico y Botón Cargar -->
+<div class="row align-items-end mb-3">
+    <!-- DESDE -->
+    <div class="col-md-3">
+        <label for="inputDesde" class="form-label">Desde:</label>
         <InputDate id="inputDesde" @bind-Value="fechaDesde" class="form-control" />
     </div>
-    <div class="col">
-        <label for="inputHasta">Hasta:</label>
+
+    <!-- HASTA -->
+    <div class="col-md-3">
+        <label for="inputHasta" class="form-label">Hasta:</label>
         <InputDate id="inputHasta" @bind-Value="fechaHasta" class="form-control" />
     </div>
 
-    <div class="col">
-        <label for="chartType">Tipo de gráfico:</label>
-        <select id="chartType" @bind="tipoGrafico" class="form-select">
-            <option value="bar">Barras</option>
-            <option value="pie">Torta</option>
-        </select>
-        <div class="col-auto">
-            <button class="btn btn-primary mb-3" @onclick="CargarDatos">Actualizar</button>
-        </div>
+
+    <!-- BOTÓN CARGAR -->
+    <div class="col-md-3">
+        <button class="btn btn-primary w-100" @onclick="CargarDatos">
+            <i class="bi bi-arrow-clockwise me-1"></i> Cargar
+        </button>
     </div>
 </div>
+
+<!-- CONTENEDOR DEL CHART -->
 <div class="chart-container">
-    @* <canvas id="chart"></canvas> *@
     <canvas id="chartCanvas"></canvas>
 </div>
+
 @code {
     private DateTime fechaDesde = DateTime.Today.AddMonths(-1);
     private DateTime fechaHasta = DateTime.Today;
@@ -77,17 +84,6 @@
     private List<decimal> datosPresupuesto = new();
     private List<decimal> datosEjecutado = new();
 
-    private DotNetObjectReference<GraficoComparativo>? objRef;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // Carga inicial sin datos hasta que el usuario presione "Actualizar"
-            objRef = DotNetObjectReference.Create(this);
-        }
-    }
-
     private async Task CargarDatos()
     {
         var lista = (await ReporteService.GetComparativoAsync(fechaDesde, fechaHasta)).ToList();
@@ -95,13 +91,7 @@
         datosPresupuesto = lista.Select(x => x.Presupuestado).ToList();
         datosEjecutado = lista.Select(x => x.Ejecutado).ToList();
 
-        // Llama al JS para renderizar/actualizar el chart
         await JSRuntime.InvokeVoidAsync("renderComparativoChart",
             "chartCanvas", etiquetas, datosPresupuesto, datosEjecutado, tipoGrafico);
-    }
-
-    public void Dispose()
-    {
-        objRef?.Dispose();
     }
 }

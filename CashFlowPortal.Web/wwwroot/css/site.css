@@ -4,7 +4,7 @@
    Variables de Color
    ================================ */
 :root {
-    --bg-sidebar: linear-gradient(180deg, #000000, #2e004f); /* Degradado negro → púrpura oscuro */
+    --bg-sidebar: #000000; /* Degradado negro → púrpura oscuro */
     --text-sidebar: #ffffff; /* Blanco */
     --accent: #FFD700; /* Amarillo */
     --bg-main: #FFFFFF; /* Blanco */
@@ -20,7 +20,7 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box;/**/
 }
 
 html, body {
@@ -43,7 +43,7 @@ html, body {
 /* ================================
    Sidebar
    ================================ */
-.sidebar {
+.sidebar{
     width: 240px; /* Ancho fijo del menú */
     background: var(--bg-sidebar); /* Aplica degradado */
     color: var(--text-sidebar);
@@ -53,10 +53,10 @@ html, body {
     top: 0;
     left: 0;
     bottom: 0;
-    /*overflow-y: auto;*/ /* Scroll si el contenido supera la altura */
-   /* z-index: 100;*/ /* Encima del contenido en mobile */
+    background-color: #000 !important;
+    background-image: none !important;
+    /* Asegurar que cubra toda la altura y quede pegado arriba */
 }
-
     /* Ajuste automático de altura en Sidebar para no dejar espacio en blanco */
     .sidebar .nav-container {
         flex: 1;
@@ -64,6 +64,28 @@ html, body {
         background-color: var(--primary-bg);
         color: var(--primary-text);
     }
+
+    .sidebar .nav-link,
+    .sidebar .nav-link i,
+    .sidebar .nav-link span {
+        color: #ffffff !important;
+    }
+
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #222222 !important; /* un gris oscuro al pasar/presionar */
+            color: #FFD700 !important; /* resaltado en amarillo */
+        }
+
+    /* Quita cualquier imagen de fondo o gradiente “azul” */
+    .sidebar a {
+        background-image: none !important;
+    }
+
+/* Si hay una clase específica para el background del menu, anúlala: */
+.nav-container {
+    background-color: transparent !important;
+}
 
 /* ================================
    Topbar (barra superior negra)
@@ -78,9 +100,12 @@ html, body {
     color: var(--text-sidebar);
     display: flex;
     align-items: center;
-    padding: 0 1.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 90; /* Debajo del sidebar si hace scroll */
+    background-color: #000 !important;
+    border: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
 }
 
 /* Título en la Topbar */
@@ -177,8 +202,10 @@ a, .btn-link {
     display: flex;
     align-items: center;
     user-select: none;
-    transition: background-color 0.2s ease;
+    /*transition: background-color 0.2s ease;*/
     position: relative;
+    background-color: #000 !important;
+    color: #fff;
 }
 
     .nav-section:hover,
@@ -198,14 +225,26 @@ a, .btn-link {
         transform: rotate(90deg);
         content: "▾";
     }
+/*    .nav-section a, .submenu a {
+        color: #fff !important;
+    }
+    .navbar-brand, .nav-link, .sidebar a {
+        color: #fff !important;
+    }*/
 
+.bg-primary {
+    background-color: #000 !important;
+    background-image: none !important;
+}
 .submenu {
-    list-style: none;
+    /**/list-style: none;
     margin: 0;
     padding: 0;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    background-color: #000 !important;
+    color: #fff;
 }
 
     .submenu.expanded {
