@@ -9,6 +9,7 @@
 @using CashFlowPortal.Web
 @using CashFlowPortal.Web.Shared
 @using CashFlowPortal.Applicacion
+@using CashFlowPortal.Applicacion.Interfaces
 @using CashFlowPortal.Applicacion.Interfaces.IServices
 @using CashFlowPortal.Applicacion.DTOs
 @using CashFlowPortal.Applicacion.DTOs.TipoGasto
@@ -20,8 +21,8 @@
 @using CashFlowPortal.Domain.Entities
 @using CashFlowPortal.Infraestructura.Data
 @using CashFlowPortal.Infraestructura.Repositories
-
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Components.Routing
+@using System.Security.Claims
+@using FluentValidation
+@using Microsoft.AspNetCore.Http

@@ -3,7 +3,6 @@ using CashFlowPortal.Applicacion.DTOs.Gasto;
 using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.IServices;
 using CashFlowPortal.Applicacion.Interfaces.Repository;
-using CashFlowPortal.Applicacion.Interfaces.Services;
 using CashFlowPortal.Domain.Entities;
 using FluentValidation;
 

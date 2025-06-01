@@ -10,11 +10,6 @@ namespace CashFlowPortal.Infraestructura.Repositories
         private readonly AppDbContext _context;
         public PresupuestoRepository(AppDbContext context) => _context = context;
 
-        public async Task<Presupuesto?> GetByIdAsync(Guid id)
-            => await _context.Presupuestos
-                             .Include(p => p.TipoGasto)
-                             .FirstOrDefaultAsync(p => p.Id == id);
-
         public async Task<List<Presupuesto>> GetByMesAsync(Guid usuarioId, DateTime mes)
             => await _context.Presupuestos
                              .Where(p => p.UsuarioId == usuarioId &&
@@ -25,13 +20,11 @@ namespace CashFlowPortal.Infraestructura.Repositories
 
         public async Task AddOrUpdateAsync(Presupuesto entity)
         {
-            try
-            {
-
 
                 var existing = await _context.Presupuestos
                     .FirstOrDefaultAsync(p =>
                         p.UsuarioId == entity.UsuarioId &&
+                        p.TipoGastoId == entity.TipoGastoId &&
                         p.Mes.Year == entity.Mes.Year &&
                         p.Mes.Month == entity.Mes.Month);
 
@@ -41,23 +34,13 @@ namespace CashFlowPortal.Infraestructura.Repositories
                 }
                 else
                 {
-                    // Actualiza campos del encabezado
-                    existing.TipoGastoId = entity.TipoGastoId;
                     existing.Monto = entity.Monto;
-
-                    // Reemplaza detalles
-                 
-
+                    //existing.TipoGastoId = entity.TipoGastoId;
                     _context.Presupuestos.Update(existing);
                 }
 
                 await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
 
-                throw;
-            }
         }
     }
 }

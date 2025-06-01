@@ -19,7 +19,7 @@ namespace CashFlowPortal.Applicacion.Mappings
             CreateMap<TipoGastoFormDto, TipoGasto>().ReverseMap();
             CreateMap<FondoMonetario, FondoMonetarioDto>().ReverseMap();
             CreateMap<Presupuesto, PresupuestoDto>()
-                .ForMember(d => d.Monto, o => o.Ignore()) // Monto total, si lo manejas sumando detalles
+                .ForMember(d => d.Monto, opt => opt.MapFrom(src => src.Monto)) // Monto total, si lo manejas sumando detalles
                 .ReverseMap();
             CreateMap<GastoDto, Gasto>().ReverseMap();
             CreateMap<GastoDetalleDto, GastoDetalle>().ReverseMap();

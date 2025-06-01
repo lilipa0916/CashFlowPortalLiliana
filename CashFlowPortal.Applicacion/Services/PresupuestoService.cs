@@ -34,7 +34,6 @@ namespace CashFlowPortal.Applicacion.Services
            
             await _validator.ValidateAndThrowAsync(dto);
             var entity = _mapper.Map<Presupuesto>(dto);
-            // Si tu entidad Presupuesto no usa Monto, puedes ignorarlo
             entity.Monto = dto.Monto;
             await _repo.AddOrUpdateAsync(entity);
         }

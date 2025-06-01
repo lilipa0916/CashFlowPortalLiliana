@@ -9,10 +9,7 @@ namespace CashFlowPortal.Applicacion.Interfaces.IRepository
         /// </summary>
         Task<List<Presupuesto>> GetByMesAsync(Guid usuarioId, DateTime mes);
 
-        /// <summary>
-        /// Obtiene un presupuesto por su Id, incluyendo detalles.
-        /// </summary>
-        Task<Presupuesto?> GetByIdAsync(Guid id);
+       
 
         /// <summary>
         /// Crea o actualiza un presupuesto (y sus detalles) según exista o no.

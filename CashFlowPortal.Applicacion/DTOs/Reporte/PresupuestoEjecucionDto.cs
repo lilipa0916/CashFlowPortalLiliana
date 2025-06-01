@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CashFlowPortal.Applicacion.DTOs.Reporte
+﻿namespace CashFlowPortal.Applicacion.DTOs.Reporte
 {
     public class PresupuestoEjecucionDto
     {

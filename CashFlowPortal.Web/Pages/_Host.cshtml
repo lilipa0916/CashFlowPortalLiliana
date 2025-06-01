@@ -36,13 +36,11 @@
     <!-- Script de Chart.js y función renderChart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Mantén una referencia global al objeto Chart para poder destruirlo y recrearlo
         var currentChart = null;
 
         window.renderComparativoChart = (canvasId, labels, presup, ejec, chartType) => {
           const ctx = document.getElementById(canvasId).getContext('2d');
 
-          // Si ya existe un gráfico renderizado, destrúyelo para evitar superposición
           if (currentChart) {
             currentChart.destroy();
           }
@@ -70,18 +68,32 @@
               plugins: {
                 legend: {
                   position: 'bottom'
-                },
-                title: {
-                  display: false
                 }
               },
               scales: {
                 y: {
                   beginAtZero: true,
                   ticks: {
-                    // Formatear valores como moneda si lo deseas
                     callback: function(value) {
-                      return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD' }).format(value);
+                      return new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0
+                      }).format(value);
+                    }
+                  }
+                }
+              },
+              plugins: {
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const v = context.parsed;
+                      return context.dataset.label + ': ' + new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0
+                      }).format(v);
                     }
                   }
                 }
