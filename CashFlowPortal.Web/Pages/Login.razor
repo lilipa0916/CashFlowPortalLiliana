@@ -1,10 +1,12 @@
 ﻿@page "/login"
+@layout LoginLayout
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 
 @inject IAuthService AuthService
 @inject NavigationManager Nav
 @inject ProtectedSessionStorage sessionStorage
 @inject Providers.JwtAuthenticationStateProvider AuthStateProvider
+
 <div class="login-container">
     <div class="login-card">
         <h3>Iniciar Sesión</h3>
@@ -20,18 +22,18 @@
             <div class="form-group">
                 <label>Usuario:</label>
                 <InputText @bind-Value="loginModel.Usuario" class="form-control" />
-                <ValidationMessage For="@(() => loginModel.Usuario)"
-                                   class="validation-message" />
+                <ValidationMessage For="@(() => loginModel.Usuario)" class="validation-message" />
             </div>
 
             <div class="form-group">
                 <label>Contraseña:</label>
                 <InputText @bind-Value="loginModel.Clave" type="password" class="form-control" />
-                <ValidationMessage For="@(() => loginModel.Clave)"
-                                   class="validation-message" />
+                <ValidationMessage For="@(() => loginModel.Clave)" class="validation-message" />
             </div>
             <br />
-            <button type="submit" class="btn-login" disabled="@isLoading">  @(isLoading ? "Ingresando..." : "Ingresar")</button>
+            <button type="submit" class="btn-login" disabled="@isLoading">
+                @(isLoading ? "Ingresando..." : "Ingresar")
+            </button>
         </EditForm>
     </div>
 </div>
@@ -40,6 +42,7 @@
     private LoginRequestDto loginModel = new();
     private string? error;
     private bool isLoading = false;
+
     private async Task HandleLogin()
     {
         if (isLoading) return;
@@ -50,7 +53,6 @@
         {
             var response = await AuthService.LoginAsync(loginModel);
             await AuthStateProvider.MarkUserAsAuthenticated(response.Token);
-            //Nav.NavigateTo("/");
             Nav.NavigateTo("/", forceLoad: true);
         }
         catch (Exception ex)

@@ -47,6 +47,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<JwtAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
+
 //Validaciones
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();

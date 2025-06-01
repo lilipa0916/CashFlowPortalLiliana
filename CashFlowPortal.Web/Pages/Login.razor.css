@@ -1,13 +1,29 @@
-﻿body {
+﻿/* ================================
+   Base para la pantalla de login
+   ================================ */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #FFFFFF; /* Fondo blanco para la pantalla de login */
 }
+
+/* ================================
+   Contenedor principal del login 
+   ================================ */
 .login-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f2f5;
+    background-color: #f0f2f5; /* Gris claro detrás de la tarjeta */
+    overflow: hidden; /* Evita scroll innecesario */
 }
 
+/* ================================
+   Tarjeta central del login
+   ================================ */
 .login-card {
     background-color: white;
     padding: 2rem;
@@ -17,6 +33,9 @@
     max-width: 400px;
 }
 
+/* ================================
+   Campos del formulario
+   ================================ */
 .form-group {
     margin-bottom: 1rem;
 }
@@ -25,8 +44,14 @@
     width: 100%;
     padding: 0.5rem;
     font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
+/* ================================
+   Botón de Ingresar
+   ================================ */
 .btn-login {
     width: 100%;
     padding: 0.75rem;
@@ -42,3 +67,12 @@
     .btn-login:hover {
         background-color: #0056b3;
     }
+
+/* ================================
+   Enfocar inputs sin sombra extraña
+   ================================ */
+.form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+}

@@ -1,13 +1,110 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+/* ================================
+   Variables de Color
+   ================================ */
+:root {
+    --bg-sidebar: linear-gradient(180deg, #000000, #2e004f); /* Degradado negro → púrpura oscuro */
+    --text-sidebar: #ffffff; /* Blanco */
+    --accent: #FFD700; /* Amarillo */
+    --bg-main: #FFFFFF; /* Blanco */
+    --text-main: #000000; /* Negro */
+    --hover-item: #1a1a1a; /* Gris muy oscuro */
+    --primary-bg: #000000; /* Negro */
+    --primary-text: #ffffff; /* Blanco */
+}
+
+/* ================================
+   Reset / Base global
+   ================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100%;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    overflow: hidden; /* Evita scroll horizontal */
 }
 
-h1:focus {
-    outline: none;
+/* ================================
+   Contenedor general de la App
+   ================================ */
+.layout-container {
+    display: flex;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    overflow: hidden; /* Evita scroll horizontal */
 }
 
+/* ================================
+   Sidebar
+   ================================ */
+.sidebar {
+    width: 240px; /* Ancho fijo del menú */
+    background: var(--bg-sidebar); /* Aplica degradado */
+    color: var(--text-sidebar);
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Fija a la izquierda */
+    top: 0;
+    left: 0;
+    bottom: 0;
+    /*overflow-y: auto;*/ /* Scroll si el contenido supera la altura */
+   /* z-index: 100;*/ /* Encima del contenido en mobile */
+}
+
+    /* Ajuste automático de altura en Sidebar para no dejar espacio en blanco */
+    .sidebar .nav-container {
+        flex: 1;
+        overflow-y: auto;
+        background-color: var(--primary-bg);
+        color: var(--primary-text);
+    }
+
+/* ================================
+   Topbar (barra superior negra)
+   ================================ */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 240px; /* Justo al lado del sidebar */
+    right: 0;
+    height: 60px;
+    background-color: #000000; /* Negro sólido */
+    color: var(--text-sidebar);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 90; /* Debajo del sidebar si hace scroll */
+}
+
+/* Título en la Topbar */
+.app-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* ================================
+   Contenido Principal
+   ================================ */
+.main-content {
+    margin-top: 60px; /* Debajo de la topbar */
+    margin-left: 240px; /* Justo al lado del sidebar */
+    padding: 1.5rem;
+    height: calc(100vh - 60px); /* Ajusta para que no haya scroll vertical doble */
+    overflow-y: auto; /* Scroll si el contenido supera la altura */
+    background-color: var(--bg-main);
+}
+
+/* ================================
+   Estilos de Botones y Validaciones
+   ================================ */
 a, .btn-link {
     color: #0071c1;
 }
@@ -18,12 +115,12 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-.content {
-    padding-top: 1.1rem;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -38,6 +135,9 @@ a, .btn-link {
     color: red;
 }
 
+/* ================================
+   Mensaje de Error de Blazor
+   ================================ */
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -58,196 +158,219 @@ a, .btn-link {
     }
 
 .blazor-error-boundary {
-    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTZiZ...) no-repeat 1rem/1.8rem, #b32121;
     padding: 1rem 1rem 1rem 3.7rem;
     color: white;
 }
 
     .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
-   
-    /*Se agrega stylos de menu*/
-
-body {
-    margin: 0;
-    font-family: "Segoe UI", sans-serif;
-}
-
-.nav-link.active {
-    background-color: #0d6efd;
-    color: white !important;
-}
-
-
-/* Colores base */
-:root {
-    --primary-bg: #000000; /* Negro */
-    --primary-text: #ffffff; /* Blanco */
-    --accent: #ffc107; /* Amarillo Bootstrap */
-    --hover-bg: #1a1a1a; /* Gris muy oscuro */
-}
-
-/* Menú lateral */
-.nav-container {
-    width: 250px;
-    background-color: var(--primary-bg);
-    color: var(--primary-text);
-    height: 100vh;
-    transition: width .3s;
-    overflow: hidden;
-}
-
-    .nav-container:hover {
-        width: 300px;
+        content: "Ha ocurrido un error.";
     }
 
-/* Secciones principales */
+/* ================================
+   NavMenu: Secciones y Submenús
+   ================================ */
 .nav-section {
-    padding: .75rem 1rem;
+    padding: 0.75rem 1.2rem;
+    font-weight: 600;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    transition: background-color 0.2s ease;
     position: relative;
 }
 
     .nav-section:hover,
     .nav-section.active {
-        background-color: var(--hover-bg);
+        background-color: var(--hover-item);
     }
 
-    /* Indicador de collapsed/expanded */
     .nav-section::after {
-        content: "▶";
+        content: "▸";
         position: absolute;
-        right: 1rem;
-        transition: transform .3s;
+        right: 1.2rem;
+        font-size: 0.8rem;
+        transition: transform 0.2s ease;
     }
 
     .nav-section.expanded::after {
         transform: rotate(90deg);
-        content: "▼";
+        content: "▾";
     }
 
-/* Submenú */
 .submenu {
     list-style: none;
-    padding-left: 0;
+    margin: 0;
+    padding: 0;
     max-height: 0;
     overflow: hidden;
-    transition: max-height .3s;
+    transition: max-height 0.3s ease;
 }
 
     .submenu.expanded {
-        max-height: 500px; /* suficiente para mostrar todos los items */
+        max-height: 400px; /* Suficiente para mostrar todos los ítems */
     }
 
-    /* Item de submenú */
     .submenu li {
-        padding: .5rem 2rem;
+        padding: 0.5rem 2.2rem;
     }
 
         .submenu li a {
-            color: var(--primary-text);
+            display: flex;
+            align-items: center;
+            color: var(--text-sidebar);
             text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
         }
+
+            .submenu li a i {
+                margin-right: 0.6rem;
+            }
 
             .submenu li a:hover {
                 color: var(--accent);
             }
 
+            .submenu li a.active {
+                background-color: var(--hover-item);
+                color: var(--accent) !important;
+                border-radius: 4px;
+            }
 
+/* ================================
+   Responsive: ajustes para pantallas pequeñas
+   ================================ */
+@media (max-width: 767px) {
+    .sidebar {
+        position: absolute;
+        width: 100%;
+        height: auto;
+        z-index: 1000;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+    }
 
-
-/*.nav-container {
-    width: 240px;
-    background-color: #2c3e50;*/ /* Fondo oscuro */
-    /*color: #ecf0f1;*/ /* Texto claro */
-    /*padding-top: 1rem;
-    padding-bottom: 1rem;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    overflow-y: auto;
-    transition: width 0.3s ease;
-}*/
-
-/* Cada sección principal del menú */
-/*.nav-section {
-    padding: 0.75rem 1rem;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-    transition: background-color 0.2s ease;
-}*/
-
-    /* Hover o sección activa */
-    /*.nav-section:hover,
-    .nav-section.active {
-        background-color: #34495e;
-        color: #ecf0f1;
-    }*/
-
-/* Icono de chevron o flecha para indicar expandido (opcional) */
-/* Si quieres agregar un ::after con una flecha, por ejemplo:
-.nav-section::after {
-  content: "▸";
-  position: absolute;
-  right: 1rem;
-  transition: transform 0.3s ease;
-}
-.nav-section.expanded::after {
-  transform: rotate(90deg);
-}
-*/
-
-/* Submenús ocultos/colapsados inicialmente */
-/*.submenu {
-    list-style: none;
-    margin: 0;
-    padding: 0 0 0 1.5rem;*/ /* sangría para el submenú */
-    /*max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}*/
-
-    /* Cuando la clase .expanded está presente, se expande el menú */
-    /*.submenu.expanded {
-        max-height: 500px;*/ /* suficientemente grande para mostrar todos los ítems */
-    /*}*/
-
-    /* Ítems dentro del submenú */
-    /*.submenu li {
-        margin: 0.25rem 0;
-    }*/
-
-        /* Enlaces del submenú */
-        /*.submenu li a {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: #bdc3c7;
-            font-size: 0.95rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 4px;
-            transition: background-color 0.2s ease, color 0.2s ease;
+        .sidebar.open {
+            transform: translateY(0);
         }
 
-            .submenu li a:hover {
-                background-color: #3d566e;
-                color: #ecf0f1;
-            }*/
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
 
-            /* Iconos dentro del NavLink */
-            /*.submenu li a i {
-                font-size: 1.1rem;
-                margin-right: 0.5rem;
-            }*/
+    .topbar {
+        left: 0;
+        justify-content: space-between;
+    }
 
-            /* Si quieres resaltar el NavLink activo (Bootstrap agrega .active automáticamente) */
-            /*.submenu li a.active {
-                background-color: #1abc9c;
-                color: #fff;
-            }*/
+    .toggle-sidebar-btn {
+        font-size: 1.5rem;
+        color: var(--text-sidebar);
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .toggle-wrapper {
+        display: block;
+    }
+}
+
+.toggle-wrapper {
+    display: none; /* Solo se muestra en móvil */
+}
+
+
+
+
+/* ================================
+   Topbar: dividir izquierda/derecha
+   ================================ */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 240px; /* coincide con ancho de sidebar */
+    right: 0;
+    height: 60px;
+    background-color: #000000;
+    color: var(--text-sidebar);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 90;
+}
+
+/* Colocar el título en el flex:  */
+.topbar-left {
+    flex: 1;
+}
+
+/* El contenedor que alberga el botón de logout: */
+.topbar-right {
+    display: flex;
+    align-items: center;
+}
+
+/* ================================
+   Botón de Logout
+   ================================ */
+.btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    color: var(--text-sidebar);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+    .btn-logout i {
+        font-size: 1.1rem;
+    }
+
+    .btn-logout:hover {
+        background-color: var(--hover-item); /* gris muy oscuro al pasar mouse */
+    }
+
+/* ================================
+   Ajustes para que el contenido no choque con Topbar
+   ================================ */
+.main-content {
+    margin-top: 60px; /* deja espacio para topbar */
+    margin-left: 240px; /* deja espacio para sidebar */
+    padding: 1.5rem;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    background-color: var(--bg-main);
+}
+/* ================================
+   Estilo especial para el botón “Salir” en el sidebar
+   ================================ */
+.logout-section {
+    padding: 0.75rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--text-sidebar);
+    transition: background-color 0.2s ease;
+}
+
+    .logout-section i {
+        font-size: 1rem;
+        margin-right: 0.6rem;
+    }
+
+    .logout-section:hover {
+        background-color: var(--hover-item);
+    }
+

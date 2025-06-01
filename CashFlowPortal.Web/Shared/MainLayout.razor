@@ -1,20 +1,70 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
+@using CashFlowPortal.Web.Providers
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using System.Security.Claims
 
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
+@inject ProtectedSessionStorage SessionStorage
 
 <PageTitle>CashFlowPortal.Web</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
+<div class="layout-container">
+    <aside class="sidebar">
         <NavMenu />
-    </div>
+    </aside>
 
-    <main>
+    <section class="main-content">
+        <header class="topbar">
+            <!-- Parte izquierda: título o logo fijo -->
+            <div class="topbar-left">
+                <h1 class="app-title">CashFlow Portal</h1>
+            </div>
 
-        <article class="content px-4">
+            <!-- Parte derecha: botón SALIR -->
+            <div class="topbar-right">
+                <button class="btn-logout" @onclick="HandleLogout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Salir</span>
+                </button>
+            </div>
+        </header>
+
+        <article class="content-area">
             @Body
         </article>
-    </main>
+    </section>
 </div>
 
+@code {
+    private bool isProcessingLogout = false;
 
+    private async Task HandleLogout()
+    {
+        if (isProcessingLogout)
+            return;
+
+        isProcessingLogout = true;
+
+        // 1) Si el AuthenticationStateProvider es nuestro JwtAuthenticationStateProvider,
+        //    llamamos a su LogoutAsync() que internamente borra el token y notifica a Blazor.
+        if (AuthStateProvider is JwtAuthenticationStateProvider jwtAuthProvider)
+        {
+            await jwtAuthProvider.LogoutAsync();
+        }
+        else
+        {
+            // 2) Si por alguna razón no tenías JwtAuthenticationStateProvider,
+            //    borramos el token de sesión (o la clave que uses) y luego
+            //    de todas formas redirigimos a /login. No es necesario
+            //    llamar a NotifyAuthenticationStateChanged porque, al llegar a /login,
+            //    Blazor volverá a pedir GetAuthenticationStateAsync y verá que no hay token.
+
+            await SessionStorage.DeleteAsync("authToken");
+        }
+
+        // 3) Finalmente redirigimos a la pantalla de login:
+        Nav.NavigateTo("/login", forceLoad: true);
+    }
+}

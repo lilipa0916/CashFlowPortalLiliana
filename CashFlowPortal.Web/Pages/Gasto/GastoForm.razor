@@ -2,7 +2,7 @@
 @attribute [Authorize]
 
 @using CashFlowPortal.Applicacion.DTOs.Gasto
-@using CashFlowPortal.Applicacion.DTOs 
+@using CashFlowPortal.Applicacion.DTOs
 @using FluentValidation
 @using System.Security.Claims
 
@@ -17,7 +17,12 @@
 
 <div class="container mt-4">
     <h3>Registro de Gastos</h3>
-
+    @if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <div class="@alertCssClass" role="alert">
+            @alertMessage
+        </div>
+    }
     <EditForm Model="model" OnValidSubmit="Guardar">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -101,6 +106,9 @@
     private List<FondoMonetarioDto> fondos = new();
     private List<TipoGastoDto> tipos = new();
     private Guid UsuarioId;
+    private string alertMessage = string.Empty;
+    private string alertCssClass = string.Empty;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -129,13 +137,28 @@
     {
         try
         {
-            
+
             await GastoService.CreateAsync(model, UsuarioId);
-            Nav.NavigateTo("/movimientos/gastos");
+            alertMessage = "El gasto fue guardado correctamente.";
+            alertCssClass = "alert alert-success";
+            model = new GastoDto { Fecha = DateTime.Today };
+            model.Detalles.Add(new GastoDetalleDto());
+
+            // fondos = await FondoService.GetAllAsync();
+            // tipos = await TipoService.GetAllAsync();
+            // Nav.NavigateTo("/movimientos/gastos");
         }
         catch (ValidationException ex)
         {
-            await JS.InvokeVoidAsync("alert", ex.Message);
+           // await JS.InvokeVoidAsync("alert", ex.Message);
+            alertMessage = ex.Message;
+            alertCssClass = "alert alert-danger";
+        }
+        catch (Exception ex)
+        {
+            // En caso de otro tipo de error
+            alertMessage = "Ocurrió un error inesperado al guardar.";
+            alertCssClass = "alert alert-danger";
         }
     }
 

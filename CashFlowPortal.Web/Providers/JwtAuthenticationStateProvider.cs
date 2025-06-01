@@ -9,6 +9,7 @@ namespace CashFlowPortal.Web.Providers
     {
         private readonly ProtectedSessionStorage _sessionStorage;
         private const string TokenKey = "authToken";
+        private readonly ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
         public JwtAuthenticationStateProvider(ProtectedSessionStorage sessionStorage)
         {
@@ -21,12 +22,6 @@ namespace CashFlowPortal.Web.Providers
             {
                 var storedTokenResult = await _sessionStorage.GetAsync<string>(TokenKey);
                 var token = storedTokenResult.Success ? storedTokenResult.Value : null;
-
-                if (string.IsNullOrEmpty(token))
-                {
-                    var anonymous = new ClaimsPrincipal(new ClaimsIdentity());
-                    return new AuthenticationState(anonymous);
-                }
 
                 var jwtHandler = new JwtSecurityTokenHandler();
                 var jwtToken = jwtHandler.ReadJwtToken(token);
@@ -45,7 +40,7 @@ namespace CashFlowPortal.Web.Providers
             catch
             {
                 var anonymous = new ClaimsPrincipal(new ClaimsIdentity());
-                return new AuthenticationState(anonymous);
+                return new AuthenticationState(_anonymous);
             }
         }
 
@@ -68,6 +63,12 @@ namespace CashFlowPortal.Web.Providers
 
             var anonymous = new ClaimsPrincipal(new ClaimsIdentity());
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(anonymous)));
+        }
+        public async Task LogoutAsync()
+        {
+            await _sessionStorage.DeleteAsync("authToken");
+            // Notificamos que ahora no hay usuario autenticado:
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_anonymous)));
         }
     }
 }

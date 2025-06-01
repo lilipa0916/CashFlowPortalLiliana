@@ -1,74 +1,70 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 
-
 <AuthorizeView>
     <Authorized>
         <div class="nav-container">
             <!-- Mantenimientos -->
             <div class="nav-section @(mantenimientoOpen ? "expanded active" : "")"
-                 @onclick="() => Toggle(ref mantenimientoOpen)"
-                 @onmouseover="() => Toggle(ref mantenimientoOpen)">
+                 @onclick="() => Toggle(ref mantenimientoOpen)">
                 Mantenimientos
             </div>
             <ul class="submenu @(mantenimientoOpen ? "expanded" : "")">
                 <li>
-                    <NavLink href="/tipogastos">
-                        <i class="bi bi-cash-stack me-2"></i>
-                        Tipos de Gasto
+                    <NavLink href="/tipogastos" class="nav-link">
+                        <i class="bi bi-cash-stack"></i>
+                        <span>Tipos de Gasto</span>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink href="/fondos">
-                        <i class="bi bi-bank me-2"></i>
-                        Fondo Monetario
+                    <NavLink href="/fondos" class="nav-link">
+                        <i class="bi bi-bank"></i>
+                        <span>Fondo Monetario</span>
                     </NavLink>
                 </li>
             </ul>
 
             <!-- Movimientos -->
             <div class="nav-section @(movimientosOpen ? "expanded active" : "")"
-                 @onclick="() => Toggle(ref movimientosOpen)"
-                 @onmouseover="() => Toggle(ref movimientosOpen)">
+                 @onclick="() => Toggle(ref movimientosOpen)">
                 Movimientos
             </div>
             <ul class="submenu @(movimientosOpen ? "expanded" : "")">
                 <li>
-                    <NavLink href="/movimientos/presupuesto">
-                        <i class="bi bi-calendar2-check me-2"></i>
-                        Presupuestos
+                    <NavLink href="/movimientos/presupuesto" class="nav-link">
+                        <i class="bi bi-calendar2-check"></i>
+                        <span>Presupuestos</span>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink href="/movimientos/gastos">
-                        <i class="bi bi-receipt me-2"></i>
-                        Registros de Gastos
+                    <NavLink href="/movimientos/gastos" class="nav-link">
+                        <i class="bi bi-receipt"></i>
+                        <span>Registros de Gastos</span>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink href="/movimientos/deposito">
-                        <i class="bi bi-wallet2 me-2"></i>
-                        Depósitos
+                    <NavLink href="/movimientos/deposito" class="nav-link">
+                        <i class="bi bi-wallet2"></i>
+                        <span>Depósitos</span>
                     </NavLink>
                 </li>
             </ul>
 
             <!-- Consultas y Reportes -->
             <div class="nav-section @(consultasOpen ? "expanded active" : "")"
-                 @onclick="() => Toggle(ref consultasOpen)"
-                 @onmouseover="() => Toggle(ref consultasOpen)">
+                 @onclick="() => Toggle(ref consultasOpen)">
                 Consultas y Reportes
             </div>
             <ul class="submenu @(consultasOpen ? "expanded" : "")">
                 <li>
-                    <NavLink href="/consultas">
-                        <i class="bi bi-search me-2"></i>
-                        Consulta de Movimientos
+                    <NavLink href="/consultas" class="nav-link">
+                        <i class="bi bi-search"></i>
+                        <span>Consulta de Movimientos</span>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink href="/reportes">
-                        <i class="bi bi-bar-chart me-2"></i>
-                        Gráfico Comparativo
+                    <NavLink href="/reportes" class="nav-link">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>Gráfico Comparativo</span>
                     </NavLink>
                 </li>
             </ul>
@@ -78,14 +74,13 @@
         <div class="nav-container">
             <div class="nav-section">
                 <NavLink href="/login" class="nav-link d-flex align-items-center">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>
-                    Iniciar Sesión
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Iniciar Sesión</span>
                 </NavLink>
             </div>
         </div>
     </NotAuthorized>
 </AuthorizeView>
-
 
 @code {
     private bool mantenimientoOpen;
