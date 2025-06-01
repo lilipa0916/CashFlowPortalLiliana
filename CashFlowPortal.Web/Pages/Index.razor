@@ -1,9 +1,76 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+@using Microsoft.AspNetCore.Components
 
-Welcome to your new app.
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-5">Bienvenido a CashFlow Portal</h1>
+        <p class="lead">
+            Lleve el control de sus ingresos y egresos por fondo monetario de manera sencilla y organizada.
+        </p>
+    </div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <!-- Mantenimientos -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Mantenimientos</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>Tipos de Gasto:</strong> Configure categorías de gasto (alimentación, transporte, ocio, etc.).<br />
+                        El sistema genera automáticamente el código siguiente para cada nuevo tipo de gasto.
+                    </p>
+                    <p class="card-text">
+                        <strong>Fondo Monetario:</strong> Registre sus cuentas bancarias o fondos de caja menuda para realizar depósitos y vincular gastos.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movimientos -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Movimientos</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>Presupuesto por Tipo de Gasto:</strong> Seleccione un mes específico para definir o actualizar el monto presupuestado por cada categoría.
+                    </p>
+                    <p class="card-text">
+                        <strong>Registros de Gastos:</strong> Agregue un gasto con encabezado y detalle (fecha, fondo, observaciones, comercio, tipo de documento).<br />
+                        En el detalle, asocie uno o más tipos de gasto con su monto. El sistema validará si supera el presupuesto y mostrará alerta indicando cuánto excede.
+                    </p>
+                    <p class="card-text">
+                        <strong>Depósitos:</strong> Registre ingresos ingresando fecha, fondo monetario y monto.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consultas y Reportes -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Consultas y Reportes</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>Consulta de Movimientos:</strong> Filtre por rango de fechas para visualizar todos los gastos y depósitos registrados.
+                    </p>
+                    <p class="card-text">
+                        <strong>Gráfico Comparativo Presupuesto y Ejecución:</strong> Seleccione un rango de fechas y obtenga un gráfico de barras que compare lo presupuestado vs. lo ejecutado por tipo de gasto, con valores en pesos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 text-center">
+        <a href="/movimientos/gastos" class="btn btn-primary btn-lg me-3">Registrar Gasto</a>
+        <a href="/reportes" class="btn btn-warning btn-lg">Ver Gráficos</a>
+    </div>
+</div>

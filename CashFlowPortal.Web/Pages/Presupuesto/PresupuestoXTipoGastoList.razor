@@ -28,7 +28,7 @@
             @* Usamos un input nativo type="month" ligado a mesString *@
             <input type="month"
                    class="form-control"
-                   @bind-value="mesD"
+                   @bind-value="mes"
                    @bind-value:event="oninput" />
         </div>
         <div class="col-auto align-self-end">
@@ -78,11 +78,9 @@
 
 @code {
     // Guardamos el año-mes en mesString con formato "yyyy-MM"
-    private string mesString = DateTime.Today.ToString("yyyy-MM");
-    private DateTime mesD = DateTime.Today;
+    private DateTime mes = DateTime.Today;
 
     // La propiedad mes extrae un DateTime con día = 1
-    private DateTime mes => DateTime.ParseExact(mesString + "-01", "yyyy-MM-dd", null);
 
     private List<PresupuestoDto>? presupuestoList;
     private List<TipoGastoDto> tipos = new();
@@ -106,6 +104,9 @@
     private async Task Cargar()
     {
         alertMessage = string.Empty;
+
+        presupuestoList = null;
+        StateHasChanged();
 
         // Trae los presupuestos existentes para usuario+mes
         var existentes = await PresupuestoService.GetByMesAsync(UsuarioId, mes);
