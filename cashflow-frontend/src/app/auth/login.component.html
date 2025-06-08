@@ -1,0 +1,26 @@
+<div class="login-container">
+    <h2>Iniciar Sesión</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-group">
+            <label for="Usuario">Usuario</label>
+            <input id="Usuario" formControlName="Usuario" />
+            <div class="error" *ngIf="form.get('Usuario')?.hasError('required')">
+                El usuario es requerido.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Clave">Contraseña</label>
+            <input id="Clave" type="password" formControlName="Clave" />
+            <div class="error" *ngIf="form.get('Clave')?.hasError('required')">
+                La contraseña es requerida.
+            </div>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
+
+        <button type="submit">Ingresar</button>
+    </form>
+</div>

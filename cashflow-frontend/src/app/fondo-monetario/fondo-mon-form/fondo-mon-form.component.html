@@ -1,0 +1,17 @@
+<h2>{{ id != null ? 'Editar' : 'Crear' }} Fondo Monetario</h2>
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+    Nombre:
+    <input formControlName="nombre" />
+  </label>
+    <div *ngIf="form.get('nombre')?.hasError('required')">Nombre es requerido</div>
+
+    <label>
+    Saldo:
+    <input type="number" formControlName="saldo" />
+  </label>
+    <div *ngIf="form.get('saldo')?.hasError('min')">El saldo debe ser ≥ 0</div>
+
+    <button type="submit">{{ id != null ? 'Guardar' : 'Crear' }}</button>
+    <button type="button" (click)="router.navigate(['fondo-monetario'])">Cancelar</button>
+</form>

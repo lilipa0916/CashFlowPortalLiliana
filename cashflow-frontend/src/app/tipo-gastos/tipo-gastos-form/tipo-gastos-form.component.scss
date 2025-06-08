@@ -1,0 +1,17 @@
+/* Estilos básicos para el formulario de TipoGastos */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    margin: auto;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+button {
+    align-self: flex-end;
+}

@@ -1,0 +1,21 @@
+<h2>Fondos Monetarios</h2>
+<button (click)="router.navigate(['fondo-monetario','nuevo'])">Nuevo Fondo</button>
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Saldo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let f of fondos">
+            <td>{{ f.nombre }}</td>
+            <td>{{ f.saldo | currency }}</td>
+            <td>
+                <button (click)="editar(f)">✏️</button>
+                <button (click)="borrar(f.id)">🗑️</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

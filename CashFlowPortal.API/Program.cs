@@ -1,9 +1,18 @@
-using CashFlowPortal.API.Services;
-using CashFlowPortal.API.Settings;
+using CashFlowPortal.Applicacion.Interfaces.IRepository;
 using CashFlowPortal.Applicacion.Interfaces.IServices;
+//using JwtSettings = CashFlowPortal.Applicacion.Services.JwtSettings;
+//using JwtTokenService = CashFlowPortal.Applicacion.Services.JwtTokenService;
+//using TipoGastoService = CashFlowPortal.Applicacion.Services.TipoGastoService;
+//using UsuarioService = CashFlowPortal.Applicacion.Services.UsuarioService;
+using CashFlowPortal.Applicacion.Interfaces.Repository;
 using CashFlowPortal.Applicacion.Interfaces.Services;
+using CashFlowPortal.Applicacion.Services;
+using CashFlowPortal.Applicacion.Services;
+using CashFlowPortal.Applicacion.Validator;
 using CashFlowPortal.Infraestructura.Data;
-using CashFlowPortal.Infraestructura.Services;
+using CashFlowPortal.Infraestructura.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,12 +26,23 @@ namespace CashFlowPortal.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            //Habilita los CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularClient",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:4200")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod()
+                              .AllowCredentials(); // si usas cookies
+                    });
+            });
+
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddScoped<IUsuarioService, UsuarioService>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
@@ -49,7 +69,27 @@ namespace CashFlowPortal.API
                 };
             });
 
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();
 
+            //Servicios
+            builder.Services.AddScoped<ITipoGastoService, TipoGastoService>();
+            builder.Services.AddScoped<IFondoMonetarioService, FondoMonetarioService>();
+            builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+
+            // Repositorios
+            builder.Services.AddScoped<ITipoGastoRepository, TipoGastoRepository>();
+            builder.Services.AddScoped<IFondoMonetarioRepository, FondoMonetarioRepository>();
+            builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+            // Swagger/OpenAPI
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = "CashFlowPortal API", Version = "v1" });
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, "Api.xml");
+                c.IncludeXmlComments(xmlPath);
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -57,13 +97,22 @@ namespace CashFlowPortal.API
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-            
+            app.UseCors("AllowAngularClient");
+
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            app.UseCors(policy =>
+            policy.WithOrigins("https://localhost:5001/")
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .AllowCredentials());
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CashFlowPortal API V1");
+                c.RoutePrefix = "swagger";
+            });
+
 
             app.UseHttpsRedirection();
 
