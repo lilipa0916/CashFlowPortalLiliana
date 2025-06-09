@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { TokenInterceptor } from './auth/token.interceptor';
+import { AuthInterceptor  } from './auth/auth.interceptor';
 
 import { LoginComponent } from './auth/login.component';
 import { AuthService } from './auth/auth.service';
@@ -31,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [AuthService, AuthGuard,{ provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
+  providers: [AuthService, AuthGuard,{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor , multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

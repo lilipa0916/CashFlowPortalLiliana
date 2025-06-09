@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { tap, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface LoginResponse {
@@ -11,15 +12,33 @@ export interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private api = `${environment.apiUrl}/Usuarios`;
+
   constructor(private http: HttpClient) {}
 
-login(Usuario: string, Clave: string) {
-  return this.http
-    .post<LoginResponse>(`${this.api}/login`, { Usuario, Clave })
-    .pipe(tap(res => localStorage.setItem('token', res.token)));
-}
+  login(Usuario: string, Clave: string): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(
+        `${this.api}/login`,
+        { Usuario, Clave },
+        {
+          // Descomenta si usas cookies/sesiones
+          // withCredentials: true
+        }
+      )
+      .pipe(
+        tap(res => {
+          if (res?.token) {
+            localStorage.setItem('token', res.token);
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error('Login failed:', error);
+          return throwError(() => error);
+        })
+      );
+  }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('token');
   }
 

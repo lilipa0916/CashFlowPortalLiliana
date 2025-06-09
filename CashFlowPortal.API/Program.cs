@@ -14,7 +14,9 @@ using CashFlowPortal.Infraestructura.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -38,7 +40,6 @@ namespace CashFlowPortal.API
                               .AllowCredentials(); // si usas cookies
                     });
             });
-
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -71,16 +72,20 @@ namespace CashFlowPortal.API
 
             builder.Services.AddFluentValidationAutoValidation();
             builder.Services.AddValidatorsFromAssemblyContaining<TipoGastoValidator>();
-
             //Servicios
+
             builder.Services.AddScoped<ITipoGastoService, TipoGastoService>();
             builder.Services.AddScoped<IFondoMonetarioService, FondoMonetarioService>();
             builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+            builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             // Repositorios
             builder.Services.AddScoped<ITipoGastoRepository, TipoGastoRepository>();
             builder.Services.AddScoped<IFondoMonetarioRepository, FondoMonetarioRepository>();
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
 
             // Swagger/OpenAPI
             builder.Services.AddEndpointsApiExplorer();

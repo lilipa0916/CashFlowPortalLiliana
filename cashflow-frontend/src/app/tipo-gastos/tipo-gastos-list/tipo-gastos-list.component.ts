@@ -10,15 +10,23 @@ import { TipoGastosService } from '../../services/tipo-gastos.service';
 })
 export class TipoGastosListComponent implements OnInit {
   tipoGastos: TipoGasto[] = [];
-   displayedColumns: string[] = ['nombre', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'acciones'];
 
   constructor(
     private service: TipoGastosService,
     public router: Router
-  ) {}                           
+  ) {}
 
   ngOnInit(): void {
-    this.service.getAll().subscribe(data => this.tipoGastos = data);
+    this.service.getAll().subscribe({
+      next: data => {
+        console.log('Tipos de gasto cargados:', data);
+        this.tipoGastos = data;
+      },
+      error: err => {
+        console.error('Error al cargar tipos de gasto:', err);
+      }
+    });
   }
 
   editar(id: string) {
@@ -26,6 +34,8 @@ export class TipoGastosListComponent implements OnInit {
   }
 
   borrar(id: string) {
-    this.service.delete(id).subscribe(() => this.tipoGastos = this.tipoGastos.filter(t => t.id !== id));
+    this.service.delete(id).subscribe(() => {
+      this.tipoGastos = this.tipoGastos.filter(t => t.id !== id);
+    });
   }
 }
